@@ -1,11 +1,13 @@
+block variables
 header
-    nav(class="navbar navbar-expand navbar-light bg-white")
-        div(class="container-fluid")
-            ul(class="navbar-nav me-auto mb-2 mb-lg-0")
-                li(class="nav-item")
-                    a(class="nav-link" href="#") Front Page 
-                li(class="nav-item")
-                    a(class="nav-link" href="#") Workers
-                li(class="nav-item")
-                    a(class="nav-link" href="#") All Issues
-                
+    nav.navbar.navbar-expand.navbar-light.bg-white
+        div.container-fluid
+            ul.navbar-nav.me-auto.mb-2.mb-lg-0.flex-grow-1
+                li.nav-item.flex-grow-1
+                    block page-name
+                li.nav-item
+                    a.nav-link(href="index.pug") Front Page 
+                li.nav-item
+                    a.nav-link(href="#") Workers
+                li.nav-item
+                    a.nav-link(href="#")  All Issues

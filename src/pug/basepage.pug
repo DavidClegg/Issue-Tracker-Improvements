@@ -1,0 +1,13 @@
+doctype html 
+html 
+    head 
+        //- Adding Material Design Bootstrap :: https://mdbootstrap.com/docs/standard/getting-started/installation/
+        link(href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet")    
+        link(href="../sass/style.sass" rel="stylesheet")
+        
+    body.container
+        include header.pug
+        block page-content
+        include footer.pug  
+                   
+    script(src="../main.js")
