@@ -1,6 +1,111 @@
 extends basepage.pug 
 
 block page-name
-    p.nav-link.fw-bold This page
+    .nav-link.brand
+        .brand__name
+            h3 This Page
+            
 block page-content
-    h1 Hello World
+    section.mb-5
+        h2 Team Members
+        article#users
+            .no-issue-message
+                h2 No Users
+        //- This is temporary
+            each user in [0,1,2,3,4,5,6]
+                .team-member
+                    img.avatar.rounded-circle.mb-3.shadow-4-strong(alt="avatar", src="../../dist/assets/users/lea_ross.jpg")
+                    h5.mb-2 name
+                    p.text-muted.issue-detail
+                        span.badge.issue-number 0
+                        span Assigned
+
+    section 
+        h2 Active Issues
+        article#issues
+            .row.justify-content-end.mb-3
+                button.btn.btn-primary(type="button" data-mdb-toggle="modal" data-mdb-target="#issueModal") Add Issue
+            .no-issue-message
+                h2 No Issues
+            table.table.align-middle.bg-white.table-hover.hide
+                thead.bg-light
+                    th Issue ID
+                    th Summary
+                    th Priority
+                    th Status
+                    th Due Date
+                    th Assigned To
+                tbody.table-group-divider
+                //- This is temporary
+                    each issue, index in [{p:"Low",c:"table-info",s:"New"},{p:"Medium",c:"table-warning",s:"In Progress"},{p:"High",c:"table-danger",s:"Resolved"},{p:"Critical",c:"table-dark",s:"Closed"},]
+                        tr
+                            td 54869 
+                            td="Issue " + index 
+                            td(class=issue.c)=issue.p
+                            td=issue.s
+                            td 2023-04-29
+                            td Ida Johansen
+                
+
+    div#issueModal.modal.fade(tabindex="-1")
+        .modal-dialog 
+            .modal-content 
+                .modal-header
+                    h5.modal-title Add Issue
+                    button.btn-close(data-mdb-dismiss="modal" aria-label="Close")
+                .modal-body
+                    form 
+                        .form-outline.mb-2
+                            input#issue-summary.form-control
+                            label.form-label(for="issue-summary") Issue Summary
+                        
+                        .form-outline.mb-2
+                            textarea#issue-description.form-control
+                            label.form-label(for="issue-description") Issue Description
+
+                        .form-floating.form-outline.mb-2
+                            select#member-select.form-select
+                                option(value, selected) Select Team Member
+                                //- This is to be populated by the JS file
+                                option person one 
+                                option person two
+                                option person three
+                                option person four
+                            label.form-label Select Team Member:
+                            
+                        .form-floating.form-outline.mb-2
+                            select#priority-select.form-select(placeholder="")
+                                option(value, selected) Select Issue Priority
+                                each opt in [{value:"Low",style:"bg-info text-dark pb-2"},{value:"Medium",style:"bg-warning text-dark pb-2"},{value:"High",style:"bg-danger text-light pb-2 "},{value:"Critical",style:"bg-dark text-light pb-2"},]
+                                    option(class=opt.style, value=opt.value)=opt.value
+                            label.form-label Priority:
+                            
+                        .form-floating.form-outline.mb-2
+                            select#status-select.form-select
+                                option(value, selected) Select Issue Status
+                                each opt in ["New", "In Progress", "Resolved", "Closed"]
+                                    option(value=opt)=opt
+                            label.form-label Status:
+                            
+                        .row
+                            .col-md-6.mb-2 
+                                .form-item
+                                    .form-outline
+                                        input#date-assign.form-control.form-control-lg(type="date")
+                                        label.form-label(for="date-assign") Date Assigned
+                                        .form-notch
+                                            .form-notch-leading 
+                                            .form-notch-middle
+                                            .form-notch-trailing
+                            .col-md-6 
+                                .form-item
+                                    .form-outline
+                                        input#date-due.form-control.form-control-lg(type="date")
+                                        label.form-label(for="date-due") Date Dues
+                                        .form-notch
+                                            .form-notch-leading 
+                                            .form-notch-middle
+                                            .form-notch-trailing
+                .modal-footer 
+                    button.btn.btn-secondary(data-mdb-dismiss="modal") Close
+                    button.btn.btn-primary Save

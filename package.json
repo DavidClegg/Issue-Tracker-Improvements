@@ -4,7 +4,8 @@
   "description": "Some functional improvements to the issue tracker example project",
     "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx parcel src/pug/index.pug --public-url ./"
+    "hot": "npx parcel src/pug/index.pug --public-url ./",
+    "build": "npx parcel build src/pug/index.pug --public-url ./"
   },
   "keywords": [],
   "author": "",

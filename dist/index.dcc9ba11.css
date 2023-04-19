@@ -2,4 +2,105 @@ body {
   font: 100% Verdana, sans-serif;
 }
 
+.brand__name {
+  color: #038230;
+}
+
+.brand__name h3 {
+  font-weight: 1000;
+}
+
+section h2 {
+  color: #222;
+  padding-bottom: 1rem;
+}
+
+section article {
+  min-height: 5rem;
+  border: 1px solid #000;
+  border-radius: 3px;
+  padding: 1rem;
+}
+
+section .no-issue-message {
+  text-align: center;
+}
+
+section .no-issue-message h2 {
+  color: gray;
+  font-size: 2rem;
+}
+
+#users {
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  display: grid;
+}
+
+.team-member {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.team-member h2 {
+  text-align: center;
+}
+
+.team-member .issue-detail {
+  display: block;
+}
+
+.team-member .issue-number {
+  background: #038230;
+  margin-right: .5rem;
+}
+
+.team-member .avatar {
+  max-width: 128px;
+  width: 5rem;
+  aspect-ratio: 1;
+}
+
+#issues {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+#issues .table th {
+  font-weight: bold;
+}
+
+#issues .table-hover tbody {
+  cursor: pointer;
+}
+
+#issues .table-hover td.table-dark {
+  font-weight: bold;
+}
+
+#issues .row {
+  width: 100%;
+}
+
+#issues .row button {
+  width: 200px;
+}
+
+.hide {
+  display: none;
+}
+
+input[type="date"] {
+  opacity: 0;
+  border: 1px solid #000;
+}
+
+select > option:first-child {
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=index.dcc9ba11.css.map */

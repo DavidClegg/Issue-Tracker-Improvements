@@ -1,8 +1,78 @@
 $font-stack: Verdana, sans-serif
-// $primary-color: #222
-// $backgroud: #ddd
+$brand: #038230
+
+@mixin flex()
+  display: flex 
+  flex-direction: column
+  align-items: center
+  justify-content: center
 
 body
   font: 100% $font-stack
-  // color: $primary-color
-  // background: $backgroud
+
+.brand__name
+  color: $brand
+  h3
+    font-weight: 1000
+
+section
+  h2
+    color: #222
+    padding-bottom: 1rem
+  article
+    border:
+      width: 1px
+      color: black
+      style: solid
+      radius: 3px
+    min-height: 5rem
+    padding: 1rem
+  .no-issue-message
+    text-align: center
+    h2
+      color: grey
+      font-size: 2rem
+  
+#users
+    display: grid
+    grid:
+      template-columns: repeat(auto-fit, minmax(105px, 1fr))
+      gap: 1rem
+
+.team-member
+  @include flex
+  h2
+    text-align: center
+  .issue-detail
+    display: block
+  .issue-number
+    background: $brand
+    margin-right: 0.5rem
+  .avatar
+    max-width: 128px
+    width: 5rem
+    aspect-ratio: 1
+
+#issues
+  @include flex
+  .table
+    th 
+      font-weight: bold
+  .table-hover
+    tbody
+      cursor: pointer
+    td.table-dark
+        font-weight: bold
+  .row
+    width: 100%
+    button
+      width: 200px
+.hide
+  display: none
+
+input[type=date]
+  opacity: 0
+  border: 1px solid black
+
+select > option:first-child
+    font-weight: bold
