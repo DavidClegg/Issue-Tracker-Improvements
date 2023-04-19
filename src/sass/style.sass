@@ -1,5 +1,5 @@
 $font-stack: Verdana, sans-serif
-$brand: #038230
+$brand: #0f64d3
 
 @mixin flex()
   display: flex 
@@ -15,6 +15,8 @@ body
   h3
     font-weight: 1000
 
+a
+  text-decoration: underline
 section
   h2
     color: #222
@@ -41,7 +43,9 @@ section
 
 .team-member
   @include flex
-  h2
+  h5
+    font-size: 0.9rem
+    font-weight: bold
     text-align: center
   .issue-detail
     display: block

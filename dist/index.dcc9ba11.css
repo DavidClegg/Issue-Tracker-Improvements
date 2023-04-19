@@ -3,11 +3,15 @@ body {
 }
 
 .brand__name {
-  color: #038230;
+  color: #0f64d3;
 }
 
 .brand__name h3 {
   font-weight: 1000;
+}
+
+a {
+  text-decoration: underline;
 }
 
 section h2 {
@@ -44,8 +48,10 @@ section .no-issue-message h2 {
   display: flex;
 }
 
-.team-member h2 {
+.team-member h5 {
   text-align: center;
+  font-size: .9rem;
+  font-weight: bold;
 }
 
 .team-member .issue-detail {
@@ -53,7 +59,7 @@ section .no-issue-message h2 {
 }
 
 .team-member .issue-number {
-  background: #038230;
+  background: #0f64d3;
   margin-right: .5rem;
 }
 
