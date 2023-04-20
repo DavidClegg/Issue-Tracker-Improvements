@@ -1,10 +1,27 @@
 extends basepage.pug 
 
 block page-name
-    p.nav-link.fw-bold Conact Page 
+    .nav-link.brand
+        .brand__name
+            h3 Contact Me
 
 block page-content
-    form
-        input(placeholder="email")
-        textarea(name="", cols="30", rows="10" placeholder="Message...") 
-        button Submit 
+    form#contactForm.container
+        .form-item.mb-4
+            .form-outline
+                input#name.form-control.my-input
+                label.form-label(for="name") Name
+            div.invalid-msg Include a Name!
+        .form-item.mb-4
+            .form-outline
+                input#email.form-control.my-input(type="email")
+                label.form-label(for="email") Email Address 
+            div.invalid-msg Use a valid Email Address!
+        .form-item.mb-4
+            .form-outline
+                textarea#message.form-control.my-input(rows="4")
+                label.form-label(for="message") Message 
+            div.invalid-msg Add something to your Message!
+        button.btn.btn-primary.btn-block.mb-4(type="submit", disabled="") Submit
+        
+    script(src="../scripts/contact.js") 

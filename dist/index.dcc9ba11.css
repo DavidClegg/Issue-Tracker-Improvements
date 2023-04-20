@@ -126,4 +126,8 @@ select > option:first-child {
   display: none;
 }
 
+#contactForm {
+  max-width: 720px;
+}
+
 /*# sourceMappingURL=index.dcc9ba11.css.map */

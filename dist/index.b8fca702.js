@@ -718,8 +718,8 @@ function CreateIssueElement(issue) {
     let row = document.createElement("tr");
     row.dataset.id = issue.id;
     // // For Modal
-    // row.dataset.mdbToggle = "modal"
-    // row.dataset.mdbTarget = "#issueModal"
+    row.dataset.mdbToggle = "modal";
+    row.dataset.mdbTarget = "#issueModal";
     // //
     let idCell = document.createElement("td");
     idCell.id = issue.id + "-idcell";
@@ -753,7 +753,8 @@ function CreateIssueElement(issue) {
 }
 function addIssueElement(issueElement, target = issueTable) {
     target.appendChild(issueElement);
-//target.addEventListener("click", updateIssueEvent)
+    // issueElement.addEventListener("click", updateIssueEvent)
+    issueElement.addEventListener("click", (e)=>console.log("Click"));
 }
 function updateIssueElement(issue) {
     // This might also have to update the user.assignedIssues variables for both users
