@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"jzlHo":[function(require,module,exports) {
+})({"3H9DN":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "73fbfdad733014bd";
+module.bundle.HMR_BUNDLE_ID = "0c81360724fd2959";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,8 +556,145 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"j8HPB":[function(require,module,exports) {
+},{}],"6TcLu":[function(require,module,exports) {
+// add existing team to page
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _teamJson = require("../../dist/assets/data/team.json");
+var _teamJsonDefault = parcelHelpers.interopDefault(_teamJson);
+const userSection = document.querySelector("#users");
+let users;
+if (localStorage.getItem("team") == null) {
+    console.log("local storage get item team is null");
+    users = [
+        ...Object.values((0, _teamJsonDefault.default))
+    ];
+    localStorage.setItem("team", users.map((user)=>JSON.stringify(user)).toString());
+} else users = localStorage.getItem("team").replaceAll("},", "}|").split("|").map((user)=>JSON.parse(user));
+users.forEach((user)=>{
+    let element = new CreateUserElement(user);
+    addUserElement(element);
+});
+const images = [
+    "../../dist/assets/users/craig_steward.jpg",
+    "../../dist/assets/users/ethan_addy.jpg",
+    "../../dist/assets/users/hannah_rogers.jpg",
+    "../../dist/assets/users/heather_walters.jpg",
+    "../../dist/assets/users/ida_johansen.jpg",
+    "../../dist/assets/users/lea_ross.jpg",
+    "../../dist/assets/users/raj_saldanha.jpg",
+    "../../dist/assets/users/wesley_cooper.jpg"
+];
+function UserObject(firstName, lastName, imgSrc) {
+    return {
+        id: "tm" + users.length,
+        firstName: firstName,
+        lastName: lastName,
+        imgSrc: imgSrc,
+        issuesAssigned: 0
+    };
+}
+function CreateUserElement(user) {
+    let container = document.createElement("div");
+    container.classList.add("team-member");
+    container.id = user.id;
+    let image = document.createElement("img");
+    image.classList.add("avatar");
+    image.classList.add("rounded-circle");
+    image.classList.add("mb-3");
+    image.classList.add("shadow-4-strong");
+    image.alt = "avatar";
+    image.src = user.imgSrc;
+    let name = document.createElement("h5");
+    name.classList.add("mb-2");
+    name.innerText = `${user.firstName} ${user.lastName}`;
+    let issueDetail = document.createElement("p");
+    issueDetail.classList.add("text-muted");
+    issueDetail.classList.add("issue-detail");
+    let issuedNum = document.createElement("span");
+    issuedNum.classList.add("badge");
+    issuedNum.classList.add("issue-number");
+    issuedNum.innerText = user.issuesAssigned;
+    let assigned = document.createElement("span");
+    assigned.innerText = "Assigned";
+    issueDetail.appendChild(issuedNum);
+    issueDetail.appendChild(assigned);
+    container.appendChild(image);
+    container.appendChild(name);
+    container.appendChild(issueDetail);
+    return container;
+}
+function addUserElement(userElement, target = userSection) {
+    target.appendChild(userElement);
+}
+// validifying the add user input
+const form = document.querySelector("#addMemberForm");
+const firstNameInput = document.querySelector("#firstName");
+const lastNameInput = document.querySelector("#lastName");
+const imageInput = document.querySelector("#image"); // Don't bother doing anything with this
+const submitButton = document.querySelector("#addMember");
+const valid = (element)=>element.setCustomValidity("");
+const invalid = (element)=>element.setCustomValidity("Invalid");
+const nameRegex = /[a-zA-Z]+/;
+function validateForm() {
+    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
+    return isValid;
+}
+firstNameInput.addEventListener("input", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
+firstNameInput.addEventListener("click", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
+lastNameInput.addEventListener("input", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(lastNameInput) : invalid(lastNameInput));
+lastNameInput.addEventListener("click", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(nameInput) : invalid(lastNameInput));
+form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    // Add code to add user
+    let user = new UserObject(firstNameInput.value, lastNameInput.value, images[Math.floor(Math.random() * images.length)]);
+    let element = new CreateUserElement(user);
+    addUserElement(element);
+    console.log("Yay, you added a new member! \uD83E\uDD73");
+    console.log({
+        firstName: firstNameInput.value,
+        lastName: lastNameInput.value
+    });
+    form.reset();
+    submitButton.setAttribute("disabled", "");
+});
+form.addEventListener("input", (e)=>{
+    let isValid = validateForm();
+    isValid ? submitButton.removeAttribute("disabled") : submitButton.setAttribute("disabled", "");
+});
 
-},{}]},["jzlHo","j8HPB"], "j8HPB", "parcelRequirec1be")
+},{"../../dist/assets/data/team.json":"lI96l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lI96l":[function(require,module,exports) {
+module.exports = JSON.parse('{"tm1":{"id":"tm1","firstName":"Lea","lastName":"Ross","imgSrc":"./assets/users/lea_ross.jpg","issuesAssigned":0},"tm2":{"id":"tm2","firstName":"Ida","lastName":"Johansen","imgSrc":"./assets/users/ida_johansen.jpg","issuesAssigned":0},"tm3":{"id":"tm3","firstName":"Heather","lastName":"Walters","imgSrc":"./assets/users/heather_walters.jpg","issuesAssigned":0},"tm4":{"id":"tm4","firstName":"Ethan","lastName":"Addy","imgSrc":"./assets/users/ethan_addy.jpg","issuesAssigned":0},"tm5":{"id":"tm5","firstName":"Raj","lastName":"Saldanha","imgSrc":"./assets/users/raj_saldanha.jpg","issuesAssigned":0},"tm6":{"id":"tm6","firstName":"Hannah","lastName":"Rogers","imgSrc":"./assets/users/hannah_rogers.jpg","issuesAssigned":0},"tm7":{"id":"tm7","firstName":"Craig","lastName":"Steward","imgSrc":"./assets/users/craig_steward.jpg","issuesAssigned":0},"tm8":{"id":"tm8","firstName":"Wesley","lastName":"Cooper","imgSrc":"./assets/users/wesley_cooper.jpg","issuesAssigned":0}}');
 
-//# sourceMappingURL=team.733014bd.js.map
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}]},["3H9DN","6TcLu"], "6TcLu", "parcelRequirec1be")
+
+//# sourceMappingURL=team.24fd2959.js.map

@@ -130,4 +130,19 @@ select > option:first-child {
   max-width: 720px;
 }
 
+.team-member:has(.extra) {
+  grid-row: -1;
+}
+
+#team-add-user {
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+#team-add-user div {
+  text-align: center;
+  font-size: 2rem;
+}
+
 /*# sourceMappingURL=index.dcc9ba11.css.map */
