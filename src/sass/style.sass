@@ -79,4 +79,17 @@ input[type=date]
   border: 1px solid black
 
 select > option:first-child
-    font-weight: bold
+  font-weight: bold
+
+.invalid-msg
+  display: none
+  color: red
+
+.form-item
+  margin-bottom: 1rem
+
+.form-item:has(.my-input:invalid) .invalid-msg
+  display: block
+
+.form-item:has(.my-input:valid) .invalid-msg
+  display: none

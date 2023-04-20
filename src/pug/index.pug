@@ -55,57 +55,70 @@ block page-content
                     button.btn-close(data-mdb-dismiss="modal" aria-label="Close")
                 .modal-body
                     form#issueForm 
-                        .form-outline.mb-2
-                            input#issue-summary.form-control
-                            label.form-label(for="issue-summary") Issue Summary
-                        
-                        .form-outline.mb-2
-                            textarea#issue-description.form-control
-                            label.form-label(for="issue-description") Issue Description
+                        .form-item
+                            .form-outline.mb-2
+                                input#issue-summary.form-control.my-input
+                                label.form-label(for="issue-summary") Issue Summary
+                            div.invalid-msg Add a Summary!
+                                
+                        .form-item
+                            .form-outline.mb-2
+                                textarea#issue-description.form-control.my-input
+                                label.form-label(for="issue-description") Issue Description
+                            div.invalid-msg Add a Description!
 
-                        .form-floating.form-outline.mb-2
-                            select#member-select.form-select
-                                option(value, selected) Select Team Member
-                            //- This is to be populated by the JS file
-                                option person one 
-                                option person two
-                                option person three
-                                option person four
-                            label.form-label Select Team Member:
+                        .form-item
+                            .form-floating.form-outline.mb-2
+                                select#member-select.form-select.my-input(required="true")
+                                    option(value, selected) Select Team Member
+                                //- This is to be populated by the JS file
+                                    option person one 
+                                    option person two
+                                    option person three
+                                    option person four
+                                label.form-label Select Team Member:
+                            div.invalid-msg Select a Team Member! 
                             
-                        .form-floating.form-outline.mb-2
-                            select#priority-select.form-select(placeholder="")
-                                option(value, selected) Select Issue Priority
-                                each opt in [{value:"Low",style:"bg-info text-dark pb-2"},{value:"Medium",style:"bg-warning text-dark pb-2"},{value:"High",style:"bg-danger text-light pb-2 "},{value:"Critical",style:"bg-dark text-light pb-2"},]
-                                    option(class=opt.style, value=opt.value)=opt.value
-                            label.form-label Priority:
-                            
-                        .form-floating.form-outline.mb-2
-                            select#status-select.form-select
-                                option(value, selected) Select Issue Status
-                                each opt in ["New", "In Progress", "Resolved", "Closed"]
-                                    option(value=opt)=opt
-                            label.form-label Status:
-                            
+                        .form-item
+                            .form-floating.form-outline.mb-2
+                                select#priority-select.form-select.my-input(placeholder="")
+                                    option(value, selected) Select Issue Priority
+                                    each opt in [{value:"Low",style:"bg-info text-dark pb-2"},{value:"Medium",style:"bg-warning text-dark pb-2"},{value:"High",style:"bg-danger text-light pb-2 "},{value:"Critical",style:"bg-dark text-light pb-2"},]
+                                        option(class=opt.style, value=opt.value)=opt.value
+                                label.form-label Priority:
+                            div.invalid-msg Select an Issue Priority!
+                                
+                        .form-item
+                            .form-floating.form-outline.mb-2
+                                select#status-select.form-select.my-input
+                                    option(value, selected) Select Issue Status
+                                    each opt in ["New", "In Progress", "Resolved", "Closed"]
+                                        option(value=opt)=opt
+                                label.form-label Status:
+                            div.invalid-msg Select an Issue Status! 
+
                         .row
                             .col-md-6.mb-2 
                                 .form-item
                                     .form-outline
-                                        input#date-assign.form-control.form-control-lg(type="date")
+                                        input#date-assign.form-control.form-control-lg.my-input(type="date",min="2001-01-01")
                                         label.form-label(for="date-assign") Date Assigned
                                         .form-notch
                                             .form-notch-leading 
                                             .form-notch-middle
                                             .form-notch-trailing
+                                    div.invalid-msg Select a valid date! 
                             .col-md-6 
                                 .form-item
                                     .form-outline
-                                        input#date-due.form-control.form-control-lg(type="date")
+                                        input#date-due.form-control.form-control-lg.my-input(type="date",min="2001-01-01")
                                         label.form-label(for="date-due") Date Dues
                                         .form-notch
                                             .form-notch-leading 
                                             .form-notch-middle
                                             .form-notch-trailing
-                .modal-footer 
-                    button.btn.btn-secondary(data-mdb-dismiss="modal") Close
-                    button#addIssue.btn.btn-primary Save
+                                        div.invalid-msg Select a valid due date! 
+
+                        .modal-footer 
+                            button.btn.btn-secondary(data-mdb-dismiss="modal") Close
+                            button#addIssue.btn.btn-primary(type="submit",data-mdb-dismiss="modal" disabled="") Save

@@ -557,30 +557,7 @@ function hmrAccept(bundle, id) {
 }
 
 },{}],"3cYfC":[function(require,module,exports) {
-/* 
-check if there is any localstorage
-    if there is then take the issues and team form local storage
-    else create the team and initialise an issues array
-        the issue and team can both be empty
-
-schema for users
-    "id": "tm1",
-    "firstName": "Lea",
-    "lastName": "Ross",
-    "imgSrc": "./assets/users/lea_ross.jpg",
-    "issuesAssigned": 0
-
-schema for issues
-    "id"
-    "summary"
-    "description"
-    "assignee-id"
-    "priority"
-    "status"
-    "date-start"
-    "date-due"
-    "change-log":[]
-*/ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _teamJson = require("../../dist/assets/data/team.json");
 var _teamJsonDefault = parcelHelpers.interopDefault(_teamJson);
 const userSection = document.querySelector("#users");
@@ -614,26 +591,21 @@ if (localStorage.getItem("team") == null) {
 // console.log("GET")
 // console.log(a)
 // // replacing the comma seperator with an uncommon symbol to make splitting easier
-// let b = a.replaceAll("},", "}|").split("|")
+// let b = a.replaceAll("},", "}|")
+// let c = b.split("|")
 // console.log("SPLIT")
-// console.log(b)
-// let c = b.map(user =>JSON.parse(user));
-// console.log("PARSE")
 // console.log(c)
-// users = c
+// let d = c.map(user =>JSON.parse(user));
+// console.log("PARSE")
+// console.log(d)
+// users = d
 users = localStorage.getItem("team").replaceAll("},", "}|").split("|").map((user)=>JSON.parse(user));
-console.log(users);
-users.forEach((user)=>UserElement(user));
-users.forEach((user)=>UserOption(user));
-let issues = [];
-// console.log("ISSUES")
-// garbage
-// let p = ["Low", "Medium", "High", "Critical"]
-// for(let i = 0; i < 10; i++){
-//     issues.push(new IssueObject("Summary", "Desc", "tm1", p[random(p)], "New", Date.now(), Date.now()))
-// }
-// console.log(issues)
-// issues.forEach(issue => IssueElement(issue))
+users.forEach((user)=>{
+    let element = new CreateUserElement(user);
+    addUserElement(element);
+});
+users.forEach((user)=>populateUserOption(user));
+let issueArray = [];
 function UserObject(firstName, lastName, imgSrc) {
     // This function creates a user object
     /// This is to expand the number of users on a team
@@ -653,7 +625,7 @@ function UserObject(firstName, lastName, imgSrc) {
         issuesAssigned: 0
     };
 }
-function UserElement(user, target = userSection) {
+function CreateUserElement(user) {
     let container = document.createElement("div");
     container.classList.add("team-member");
     container.id = user.id;
@@ -681,10 +653,18 @@ function UserElement(user, target = userSection) {
     container.appendChild(image);
     container.appendChild(name);
     container.appendChild(issueDetail);
-    target.appendChild(container);
-    return;
+    return container;
 }
-function UserOption(user, target = form.memberSelect) {
+function addUserElement(userElement, target = userSection) {
+    target.appendChild(userElement);
+}
+function updateUserElement(user) {
+    // Find user element on page
+    let oldUser = document.querySelector(`#${user.id}`);
+    let newUser = new CreateUserElement(user);
+    oldUser.replaceWith(newUser);
+}
+function populateUserOption(user, target = form.memberSelect) {
     // add users to the issue options
     let option = document.createElement("option");
     option.value = user.id;
@@ -693,7 +673,7 @@ function UserOption(user, target = form.memberSelect) {
 }
 function IssueObject(summary, description, assigneeID, priority, status, dateStart, dateDue) {
     let issue = {
-        id: 0,
+        id: `is${issueArray.length}`,
         summary,
         description,
         assigneeID,
@@ -704,7 +684,7 @@ function IssueObject(summary, description, assigneeID, priority, status, dateSta
     };
     return issue;
 }
-function IssueElement(issue, target = issueTable) {
+function CreateIssueElement(issue) {
     let row = document.createElement("tr");
     let idCell = document.createElement("td");
     idCell.id = issue.id + "-idcell";
@@ -734,14 +714,23 @@ function IssueElement(issue, target = issueTable) {
     row.appendChild(statusCell);
     row.appendChild(dueCell);
     row.appendChild(assignCell);
-    target.appendChild(row);
-    return;
+    return row;
+}
+function addIssueElement(issueElement, target = issueTable) {
+    target.appendChild(issueElement);
+}
+function updateIssueElement(issue) {
+    // This might also have to update the user.assignedIssues variables for both users
+    let oldIssue = document.querySelector(`#${issue.id}`);
+    let newIssue = new CreateIssueElement(issue);
+    oldIssue.replaceWith(newIssue);
 }
 function random(a) {
     // This is to create junk data
     return Math.floor(Math.random() * a.length);
 }
-form.addIssue.addEventListener("click", (e)=>{
+form.body.addEventListener("submit", (e)=>{
+    e.preventDefault();
     console.log("ADD ISSUE");
     // get data from elements
     let summary = form.issueSummary.value;
@@ -749,48 +738,66 @@ form.addIssue.addEventListener("click", (e)=>{
     let member = form.memberSelect.value;
     let priority = form.prioritySelect.value;
     let status = form.statusSelect.value;
-    let dateAssign = form.dateAssign.value;
-    let dateDue = form.dateDue.value;
-    console.log({
-        summary,
-        description,
-        member,
-        priority,
-        status,
-        dateAssign,
-        dateDue
-    });
+    let dateAssign = form.dateAssign.valueAsNumber;
+    let dateDue = form.dateDue.valueAsNumber;
     // create new issue
     let issue = new IssueObject(summary, description, member, priority, status, dateAssign, dateDue);
     // add issue to page
-    issues.push(issue);
-    IssueElement(issue);
+    issueArray.push(issue);
+    let newIssue = new CreateIssueElement(issue);
+    addIssueElement(newIssue);
     // increment members issue count
     let targetMember = users.find((user)=>user.id == member);
     targetMember.issuesAssigned++;
-    document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
-// update page
+    // document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
+    updateUserElement(targetMember);
+    // update page
+    form.body.reset();
+    form.addIssue.setAttribute("disabled", "");
 });
-function updateAllUserElementIssueNumbers() {
-    users.forEach((user)=>document.querySelector(`#${user.id} .badge`).innerText = user.issuesAssigned);
-} /**TODO
- *  Handle appending issues sensibly
- *      By default the no issue sign should be up
- *      If it is and I'm adding an issue then take the sign down, show the table, and add the issue
- *  Handle updating the users sensibly
- *      If I add the user ID to the team-member div then I can select the div and update the child issue number element easily
- *  Handle saving and loading issues
- * 
- *  Handle updating issues
- * 
- *  Handle form validation
- *      This one is kind of important as it's the entire premise of Project 11
- * 
- *  Create the other pages
- *      Contact
- *      Issue List
- *      Team List
- */ 
+// Validation Logic
+const valid = (element)=>element.setCustomValidity("");
+const invalid = (element)=>element.setCustomValidity("Invalid");
+function validateForm() {
+    let isValid = form.issueSummary.value.length >= 1 && form.issueDescription.value.length >= 1 && form.memberSelect.value != "value" && form.prioritySelect.value != "value" && form.statusSelect.value != "value" && form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber;
+    return isValid;
+}
+form.body.addEventListener("change", (e)=>{
+    let isValid = validateForm();
+    if (isValid) form.addIssue.removeAttribute("disabled");
+    else form.addIssue.setAttribute("disabled", "");
+});
+form.issueSummary.addEventListener("input", (e)=>{
+    console.log("Summary CHANGE");
+    form.issueSummary.value.length >= 1 ? valid(form.issueSummary) : invalid(form.issueSummary);
+});
+form.issueDescription.addEventListener("input", (e)=>{
+    console.log("Description CHANGE");
+    form.issueDescription.value.length >= 1 ? valid(form.issueDescription) : invalid(form.issueDescription);
+});
+form.memberSelect.addEventListener("input", (e)=>{
+    console.log("Member CHANGE");
+    form.memberSelect.value != "value" ? valid(form.memberSelect) : invalid(form.memberSelect);
+});
+form.prioritySelect.addEventListener("change", (e)=>{
+    console.log("Priority CHANGE");
+    form.prioritySelect.value != "value" ? valid(form.prioritySelect) : invalid(form.prioritySelect);
+});
+form.statusSelect.addEventListener("change", (e)=>{
+    console.log("Status CHANGE");
+    form.statusSelect.value != "value" ? valid(form.statusSelect) : invalid(form.statusSelect);
+});
+form.dateAssign.addEventListener("change", (e)=>{
+    console.log("Date Assign CHANGE");
+    form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber ? valid(form.dateDue) : invalid(form.dateDue);
+});
+form.dateDue.addEventListener("change", (e)=>{
+    console.log("Date Due CHANGE");
+    form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber ? valid(form.dateDue) : invalid(form.dateDue);
+}) /* Editing an Issue:
+    I should be able to pass the issue as the value for each input
+
+*/ ;
 
 },{"../../dist/assets/data/team.json":"lI96l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lI96l":[function(require,module,exports) {
 module.exports = JSON.parse('{"tm1":{"id":"tm1","firstName":"Lea","lastName":"Ross","imgSrc":"./assets/users/lea_ross.jpg","issuesAssigned":0},"tm2":{"id":"tm2","firstName":"Ida","lastName":"Johansen","imgSrc":"./assets/users/ida_johansen.jpg","issuesAssigned":0},"tm3":{"id":"tm3","firstName":"Heather","lastName":"Walters","imgSrc":"./assets/users/heather_walters.jpg","issuesAssigned":0},"tm4":{"id":"tm4","firstName":"Ethan","lastName":"Addy","imgSrc":"./assets/users/ethan_addy.jpg","issuesAssigned":0},"tm5":{"id":"tm5","firstName":"Raj","lastName":"Saldanha","imgSrc":"./assets/users/raj_saldanha.jpg","issuesAssigned":0},"tm6":{"id":"tm6","firstName":"Hannah","lastName":"Rogers","imgSrc":"./assets/users/hannah_rogers.jpg","issuesAssigned":0},"tm7":{"id":"tm7","firstName":"Craig","lastName":"Steward","imgSrc":"./assets/users/craig_steward.jpg","issuesAssigned":0},"tm8":{"id":"tm8","firstName":"Wesley","lastName":"Cooper","imgSrc":"./assets/users/wesley_cooper.jpg","issuesAssigned":0}}');

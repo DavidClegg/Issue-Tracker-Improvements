@@ -109,4 +109,21 @@ select > option:first-child {
   font-weight: bold;
 }
 
+.invalid-msg {
+  color: red;
+  display: none;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+}
+
+.form-item:has(.my-input:invalid) .invalid-msg {
+  display: block;
+}
+
+.form-item:has(.my-input:valid) .invalid-msg {
+  display: none;
+}
+
 /*# sourceMappingURL=index.dcc9ba11.css.map */
