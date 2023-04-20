@@ -24,7 +24,7 @@ block page-content
         h2 Active Issues
         article#issues
             .row.justify-content-end.mb-3
-                button.btn.btn-primary(type="button" data-mdb-toggle="modal" data-mdb-target="#issueModal") Add Issue
+                button#showModal.btn.btn-primary(type="button" data-mdb-toggle="modal" data-mdb-target="#issueModal") Add Issue
             .no-issue-message.hide
                 h2 No Issues
             table.table.align-middle.bg-white.table-hover
@@ -51,7 +51,7 @@ block page-content
         .modal-dialog 
             .modal-content 
                 .modal-header
-                    h5.modal-title Add Issue
+                    h5#modal-title.modal-title Add Issue
                     button.btn-close(data-mdb-dismiss="modal" aria-label="Close")
                 .modal-body
                     form#issueForm 

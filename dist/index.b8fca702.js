@@ -562,9 +562,12 @@ var _teamJson = require("../../dist/assets/data/team.json");
 var _teamJsonDefault = parcelHelpers.interopDefault(_teamJson);
 const userSection = document.querySelector("#users");
 const issueTable = document.querySelector("#issueTable");
+const issueModal = document.querySelector("#iissueModal");
+const showModalButton = document.querySelector("#showModal");
+// const myModal = new mdb.Modal(issueModal);
 const form = {
     body: document.querySelector("#issueForm"),
-    title: document.querySelector("#issueForm .modal-title"),
+    title: document.querySelector("#modal-title"),
     issueSummary: document.querySelector("#issue-summary"),
     issueDescription: document.querySelector("#issue-description"),
     memberSelect: document.querySelector("#member-select"),
@@ -605,7 +608,34 @@ users.forEach((user)=>{
     addUserElement(element);
 });
 users.forEach((user)=>populateUserOption(user));
+// import issueJSON from "../../dist/assets/data/issues.json";
 let issueArray = [];
+// Load Issues
+if (localStorage.getItem("issues") == null) {
+    console.log("local storage get issues is null");
+    // issueArray = [...Object.values(issuesJSON)]; // This should be from import
+    localStorage.setItem("issues", "{}");
+} else {
+    let a = localStorage.getItem("issues");
+    console.log("GET");
+    console.log(a);
+    // replacing the comma seperator with an uncommon symbol to make splitting easier
+    let b = a.replaceAll("},", "}|");
+    let c = b.split("|");
+    console.log("SPLIT");
+    console.log(c);
+    let d = c.map((issue)=>JSON.parse(issue));
+    console.log("PARSE");
+    console.log(d);
+    issueArray = d;
+}
+if (issueArray.length > 0) {
+    issueArray.forEach((issue)=>{
+        let newIssue = new CreateIssueElement(issue);
+        addIssueElement(newIssue);
+    });
+    updateMemberIssueCount();
+}
 function UserObject(firstName, lastName, imgSrc) {
     // This function creates a user object
     /// This is to expand the number of users on a team
@@ -686,6 +716,11 @@ function IssueObject(summary, description, assigneeID, priority, status, dateSta
 }
 function CreateIssueElement(issue) {
     let row = document.createElement("tr");
+    row.dataset.id = issue.id;
+    // // For Modal
+    // row.dataset.mdbToggle = "modal"
+    // row.dataset.mdbTarget = "#issueModal"
+    // //
     let idCell = document.createElement("td");
     idCell.id = issue.id + "-idcell";
     idCell.innerText = issue.id;
@@ -718,6 +753,7 @@ function CreateIssueElement(issue) {
 }
 function addIssueElement(issueElement, target = issueTable) {
     target.appendChild(issueElement);
+//target.addEventListener("click", updateIssueEvent)
 }
 function updateIssueElement(issue) {
     // This might also have to update the user.assignedIssues variables for both users
@@ -742,16 +778,18 @@ form.body.addEventListener("submit", (e)=>{
     let dateDue = form.dateDue.valueAsNumber;
     // create new issue
     let issue = new IssueObject(summary, description, member, priority, status, dateAssign, dateDue);
-    // add issue to page
     issueArray.push(issue);
+    saveIssues();
+    // add issue to page
     let newIssue = new CreateIssueElement(issue);
     addIssueElement(newIssue);
     // increment members issue count
-    let targetMember = users.find((user)=>user.id == member);
-    targetMember.issuesAssigned++;
-    // document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
-    updateUserElement(targetMember);
+    updateMemberIssueCount();
+    // let targetMember = users.find(user => user.id == member);
+    // // targetMember.issuesAssigned++;
+    // // document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
     // update page
+    saveUsers();
     form.body.reset();
     form.addIssue.setAttribute("disabled", "");
 });
@@ -762,6 +800,12 @@ function validateForm() {
     let isValid = form.issueSummary.value.length >= 1 && form.issueDescription.value.length >= 1 && form.memberSelect.value != "value" && form.prioritySelect.value != "value" && form.statusSelect.value != "value" && form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber;
     return isValid;
 }
+showModalButton.addEventListener("click", (e)=>{
+    console.log("Show Modal Button was Clicked");
+    form.title.innerText = `Add Issue`;
+    form.body.reset();
+    form.addIssue.setAttribute("disabled", "");
+});
 form.body.addEventListener("change", (e)=>{
     let isValid = validateForm();
     if (isValid) form.addIssue.removeAttribute("disabled");
@@ -794,10 +838,54 @@ form.dateAssign.addEventListener("change", (e)=>{
 form.dateDue.addEventListener("change", (e)=>{
     console.log("Date Due CHANGE");
     form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber ? valid(form.dateDue) : invalid(form.dateDue);
-}) /* Editing an Issue:
+});
+function saveIssues() {
+    localStorage.setItem("issues", issueArray.map((issue)=>JSON.stringify(issue)).toString());
+}
+function saveUsers() {
+    localStorage.setItem("team", users.map((user)=>JSON.stringify(user)).toString());
+}
+function updateMemberIssueCount() {
+    let member;
+    let targetMember;
+    users.forEach((user)=>user.issuesAssigned = 0);
+    issueArray.forEach((issue)=>{
+        if (issue.status != "Closed") {
+            member = issue.assigneeID;
+            targetMember = users.find((user)=>user.id == member);
+            targetMember.issuesAssigned++;
+        }
+    });
+    updateUserElement(targetMember);
+}
+/* Editing an Issue:
     I should be able to pass the issue as the value for each input
 
-*/ ;
+*/ function updateIssueEvent(event) {
+    // Get the issue from the issue array
+    console.log("You Clicked an ISSUE!");
+    let element = event.target.parentElement;
+    console.log(element);
+    let issueId = element.dataset.id;
+    console.log(issueId);
+    let issueObject = issueArray.find((issue)=>issue.id == issueId);
+    console.log(issueObject);
+    // populate form
+    console.log(form);
+    form.title.innerText = `Updating issue ${issueId}`;
+    form.issueSummary.value = issueObject.summary;
+    form.issueDescription.value = issueObject.description;
+    form.memberSelect.value = issueObject.assigneeID;
+    form.prioritySelect.value = issueObject.priority;
+    form.statusSelect.value = issueObject.status;
+    form.dateAssign.value = new Date(issueObject.dateStart).toISOString().substr(0, 10);
+    form.dateAssign.focus();
+    // form.dateAssign.style.opacity = 1;
+    // form.dateAssign.classList.add("active")
+    form.dateDue.value = new Date(issueObject.dateDue).toISOString().substr(0, 10);
+    form.dateDue.style.opacity = 1;
+    form.dateDue.classList.add("active");
+}
 
 },{"../../dist/assets/data/team.json":"lI96l","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lI96l":[function(require,module,exports) {
 module.exports = JSON.parse('{"tm1":{"id":"tm1","firstName":"Lea","lastName":"Ross","imgSrc":"./assets/users/lea_ross.jpg","issuesAssigned":0},"tm2":{"id":"tm2","firstName":"Ida","lastName":"Johansen","imgSrc":"./assets/users/ida_johansen.jpg","issuesAssigned":0},"tm3":{"id":"tm3","firstName":"Heather","lastName":"Walters","imgSrc":"./assets/users/heather_walters.jpg","issuesAssigned":0},"tm4":{"id":"tm4","firstName":"Ethan","lastName":"Addy","imgSrc":"./assets/users/ethan_addy.jpg","issuesAssigned":0},"tm5":{"id":"tm5","firstName":"Raj","lastName":"Saldanha","imgSrc":"./assets/users/raj_saldanha.jpg","issuesAssigned":0},"tm6":{"id":"tm6","firstName":"Hannah","lastName":"Rogers","imgSrc":"./assets/users/hannah_rogers.jpg","issuesAssigned":0},"tm7":{"id":"tm7","firstName":"Craig","lastName":"Steward","imgSrc":"./assets/users/craig_steward.jpg","issuesAssigned":0},"tm8":{"id":"tm8","firstName":"Wesley","lastName":"Cooper","imgSrc":"./assets/users/wesley_cooper.jpg","issuesAssigned":0}}');

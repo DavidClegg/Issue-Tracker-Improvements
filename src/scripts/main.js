@@ -1,9 +1,12 @@
 const userSection = document.querySelector("#users");
 const issueTable = document.querySelector("#issueTable");
+const issueModal = document.querySelector("#iissueModal");
+const showModalButton = document.querySelector("#showModal");
+// const myModal = new mdb.Modal(issueModal);
 
 const form = {
     body: document.querySelector("#issueForm"),
-    title: document.querySelector("#issueForm .modal-title"),
+    title: document.querySelector("#modal-title"),
     
     issueSummary: document.querySelector("#issue-summary"),
     issueDescription: document.querySelector("#issue-description"),
@@ -43,7 +46,36 @@ if(localStorage.getItem("team") == null){
 users.forEach(user => {let element = new CreateUserElement(user);addUserElement(element);})
 users.forEach(user => populateUserOption(user))
 
+// import issueJSON from "../../dist/assets/data/issues.json";
 let issueArray = [];
+// Load Issues
+if(localStorage.getItem("issues") == null){
+    console.log("local storage get issues is null");
+    // issueArray = [...Object.values(issuesJSON)]; // This should be from import
+    localStorage.setItem("issues", "{}")
+} else {
+    let a = localStorage.getItem("issues")
+    console.log("GET")
+    console.log(a)
+    // replacing the comma seperator with an uncommon symbol to make splitting easier
+    let b = a.replaceAll("},", "}|")
+    let c = b.split("|")
+    console.log("SPLIT")
+    console.log(c)
+    let d = c.map(issue =>JSON.parse(issue));
+    console.log("PARSE")
+    console.log(d)
+    issueArray = d
+}
+
+if(issueArray.length > 0){
+    issueArray.forEach(issue => {
+        let newIssue = new CreateIssueElement(issue);
+        addIssueElement(newIssue);
+    })
+    updateMemberIssueCount()
+} 
+
 function UserObject(firstName, lastName, imgSrc){
     // This function creates a user object
     /// This is to expand the number of users on a team
@@ -133,6 +165,11 @@ function IssueObject(summary, description, assigneeID, priority, status, dateSta
 
 function CreateIssueElement(issue){
     let row = document.createElement("tr");
+    row.dataset.id = issue.id;
+    // // For Modal
+    // row.dataset.mdbToggle = "modal"
+    // row.dataset.mdbTarget = "#issueModal"
+    // //
         let idCell = document.createElement("td");
         idCell.id = issue.id + "-idcell"
         idCell.innerText = issue.id
@@ -164,6 +201,7 @@ function CreateIssueElement(issue){
 
 function addIssueElement(issueElement, target = issueTable){
     target.appendChild(issueElement);
+    //target.addEventListener("click", updateIssueEvent)
 }
 
 function updateIssueElement(issue){
@@ -191,16 +229,19 @@ form.body.addEventListener("submit", e=>{
     let dateDue = form.dateDue.valueAsNumber;
     // create new issue
     let issue = new IssueObject(summary, description, member, priority, status, dateAssign, dateDue)
-    // add issue to page
     issueArray.push(issue)
+    saveIssues();
+    // add issue to page
     let newIssue = new CreateIssueElement(issue);
     addIssueElement(newIssue);
     // increment members issue count
-    let targetMember = users.find(user => user.id == member);
-    targetMember.issuesAssigned++;
-    // document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
-    updateUserElement(targetMember);
+    updateMemberIssueCount();
+    // let targetMember = users.find(user => user.id == member);
+    // // targetMember.issuesAssigned++;
+    // // document.querySelector(`#${targetMember.id} .badge`).innerText = targetMember.issuesAssigned;
+    
     // update page
+    saveUsers();
     form.body.reset()
     form.addIssue.setAttribute("disabled", "")
 })
@@ -222,6 +263,12 @@ function validateForm(){
     return isValid
 }
 
+showModalButton.addEventListener("click", e=>{
+    console.log("Show Modal Button was Clicked")
+    form.title.innerText = `Add Issue`;
+    form.body.reset()
+    form.addIssue.setAttribute("disabled", "")
+})
 form.body.addEventListener("change", e=>{
     let isValid = validateForm()
     if(isValid){
@@ -274,8 +321,61 @@ form.dateDue.addEventListener("change", e=>{
         invalid(form.dateDue)
 })
 
+function saveIssues(){
+    localStorage.setItem("issues", issueArray.map(issue=>JSON.stringify(issue)).toString())
+}
+
+function saveUsers(){
+    localStorage.setItem("team", users.map(user=>JSON.stringify(user)).toString())
+}
+
+function updateMemberIssueCount(){
+    let member;
+    let targetMember;
+    users.forEach(user => user.issuesAssigned = 0);
+    issueArray.forEach(issue => {
+        if(issue.status != "Closed"){
+            member = issue.assigneeID;
+            targetMember = users.find(user => user.id == member);
+            targetMember.issuesAssigned++;
+        }
+    })
+    updateUserElement(targetMember);
+}
 
 /* Editing an Issue:
     I should be able to pass the issue as the value for each input
 
 */
+
+function updateIssueEvent(event){
+    // Get the issue from the issue array
+    console.log("You Clicked an ISSUE!")
+    let element = event.target.parentElement;
+    console.log(element)
+    let issueId = element.dataset.id;
+    console.log(issueId)
+    let issueObject = issueArray.find(issue => issue.id == issueId)
+    console.log(issueObject)
+
+    // populate form
+    console.log(form)
+    form.title.innerText = `Updating issue ${issueId}`;
+    form.issueSummary.value = issueObject.summary;
+    form.issueDescription.value = issueObject.description;
+    form.memberSelect.value = issueObject.assigneeID;
+    form.prioritySelect.value = issueObject.priority;
+    form.statusSelect.value = issueObject.status;
+
+    form.dateAssign.value = new Date(issueObject.dateStart).toISOString().substr(0, 10);
+    
+    form.dateAssign.focus();
+    // form.dateAssign.style.opacity = 1;
+    // form.dateAssign.classList.add("active")
+
+    form.dateDue.value = new Date(issueObject.dateDue).toISOString().substr(0, 10);
+    form.dateDue.style.opacity = 1;
+    form.dateDue.classList.add("active")
+
+    
+}
