@@ -30,7 +30,7 @@ const pageElements = {
 }
 
 pageElements.title.innerText = `Issue: ${targetIssue.id}`
-pageElements.id.innerText = `Issue: ${targetIssue.id}`
+pageElements.id.innerText = `${targetIssue.id}`
 pageElements.assignee.image.src = issueMember.imgSrc;
 pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
 pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {"dateStyle":"short"});
@@ -41,5 +41,4 @@ pageElements.priority.classList.add(priorityStyle[targetIssue.priority]);
 pageElements.priority.classList.add(priorityTextStyle[targetIssue.priority]); // changing this is going to be a bit of a pain
 pageElements.summary.innerText = targetIssue.summary;
 pageElements.description.innerText = targetIssue.description;
-
 

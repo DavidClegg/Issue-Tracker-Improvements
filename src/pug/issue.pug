@@ -14,7 +14,8 @@ block page-content
         article 
             .row.justify-content-end.mb-3.gap-3
                 button#EditIssue.btn.btn-primary.col-md-3(type="button") Edit Issue
-                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") Remove Issue
+                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") 
+                    strong Remove Issue
             .container
                 .row.gx-5
                     .col-md-4
@@ -48,8 +49,8 @@ block page-content
                                 p.text-center#issueStatusElement In Progress 
                                 hr
                             .col-md-6 
-                                p#issuePriorityElement.text-center.mb-0.pb-3 Medium
-                                hr.mt-0
+                                p#issuePriorityElement.text-center.mb-0.pb-2.pt-2 Medium
+                                hr.mt-0 
                         .row.gx-2
                             p#issueSummaryElement Lorem ipsum dolor
                             hr
@@ -73,3 +74,6 @@ block page-content
                                         td Descrption 
                                         td This is my changed description example
     script(src="../scripts/issuePage.js", type="module") 
+    //- I'm really proud of this page. It's simple and effective.
+    //- But I think it would be best to turn this basically into a form.
+    //- That means trashing the whole things and going with something else.

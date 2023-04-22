@@ -145,20 +145,3 @@ export function random(min = 0, max){
 }
 function save(){/**I want this to be a save for my 3 localStorages */}
 
-/**
- * Used https://json-generator.com/ to generate the issue data with:
-[
-  '{{repeat(30)}}',
-  {
-    id: 'is' + '{{index()}}',
-    summary: '{{lorem(integer(1,5), "words")}}',
-    descript: '{{lorem(1, "paragraphs")}}',
-    assigneeID: 'tm' + '{{integer(1,8)}}',
-    priority:'{{random("Low", "Medium", "High", "Critical")}}', //
-    status:'{{random("New", "In Progress", "Resolved", "Closed")}}', //
-    dateStart:'{{integer(1681430400000, 1688083200000)}}',
-    dateDue:function () { return this.dateStart + Math.floor(Math.random() * 6652800000); }
-  }
-]
-then needed to add the id to each object manually
- */

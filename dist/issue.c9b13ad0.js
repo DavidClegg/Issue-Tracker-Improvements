@@ -595,7 +595,7 @@ const pageElements = {
     logTable: document.querySelector("#issueLogTable")
 };
 pageElements.title.innerText = `Issue: ${targetIssue.id}`;
-pageElements.id.innerText = `Issue: ${targetIssue.id}`;
+pageElements.id.innerText = `${targetIssue.id}`;
 pageElements.assignee.image.src = issueMember.imgSrc;
 pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
 pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {

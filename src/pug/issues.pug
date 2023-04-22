@@ -6,11 +6,12 @@ block page-name
             h3 Issues
 block page-content
     section
-        h1 Hello Issues
+        h1 Active Issues
         article#issues
-            .row.justify-content-end.mb-3
-                button#showModal.btn.btn-primary.me-3(type="button" data-mdb-toggle="modal" data-mdb-target="#issueModal") Add Issue
-                button#clearIssuesButton.btn.btn-warning.text-dark(type="button" data-mdb-toggle="modal" data-mdb-target="#issueModal") Clear Issues
+            .row.justify-content-end.mb-3.gap-3
+                button#EditIssue.btn.btn-primary.col-md-3(type="button") Add Issue
+                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") 
+                    strong Remove Issues
             table.table.align-middle.bg-white.table-hover 
                 thead.bg-light 
                     th Issue ID

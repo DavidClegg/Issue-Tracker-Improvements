@@ -627,11 +627,11 @@ imageInput.addEventListener("input", (e)=>{
     // console.log(imageInput.files[0].size)
     if (imageInput.files[0].size <= 10000) {
         valid(imageInput);
-        console.log("Valid Image");
+        // console.log("Valid Image")
         document.querySelector("#fileInvalid").style.display = "none";
     } else {
         invalid(imageInput);
-        console.error("Invalid Image");
+        // console.error("Invalid Image")
         document.querySelector("#fileInvalid").style.display = "block";
     }
 });
@@ -791,23 +791,7 @@ function random(min = 0, max) {
     // This is to create junk data
     return Math.floor(min + Math.random() * (max - min));
 }
-function save() {} /**
- * Used https://json-generator.com/ to generate the issue data with:
-[
-  '{{repeat(30)}}',
-  {
-    id: 'is' + '{{index()}}',
-    summary: '{{lorem(integer(1,5), "words")}}',
-    descript: '{{lorem(1, "paragraphs")}}',
-    assigneeID: 'tm' + '{{integer(1,8)}}',
-    priority:'{{random("Low", "Medium", "High", "Critical")}}', //
-    status:'{{random("New", "In Progress", "Resolved", "Closed")}}', //
-    dateStart:'{{integer(1681430400000, 1688083200000)}}',
-    dateDue:function () { return this.dateStart + Math.floor(Math.random() * 6652800000); }
-  }
-]
-then needed to add the id to each object manually
- */ 
+function save() {}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3H9DN","6TcLu"], "6TcLu", "parcelRequirec1be")
 

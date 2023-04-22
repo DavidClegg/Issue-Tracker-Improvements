@@ -84,11 +84,11 @@ imageInput.addEventListener("input", e=>{
     // console.log(imageInput.files[0].size)
     if(imageInput.files[0].size <= 10000){
         valid(imageInput)
-        console.log("Valid Image")
+        // console.log("Valid Image")
         document.querySelector("#fileInvalid").style.display = "none"
     } else { 
         invalid(imageInput)
-        console.error("Invalid Image")
+        // console.error("Invalid Image")
         document.querySelector("#fileInvalid").style.display = "block"
     }
 })
