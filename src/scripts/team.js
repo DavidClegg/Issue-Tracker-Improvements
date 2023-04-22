@@ -52,6 +52,10 @@ lastNameInput.addEventListener("click", () => lastNameInput.value.length >= 1 &&
 
 form.addEventListener("submit", e => {
     e.preventDefault();
+    console.log(e)
+    if(e.submitter == document.querySelector("button#cancel")){
+        return;
+    } 
     // Add code to add user
     let user = new UserObject(firstNameInput.value, lastNameInput.value, images[Math.floor(Math.random()*images.length)], users)
         let element = new CreateUserElement(user);

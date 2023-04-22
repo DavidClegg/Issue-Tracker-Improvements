@@ -576,8 +576,8 @@ const priorityStyle = {
 const priorityTextStyle = {
     "Low": "text-dark",
     "Medium": "text-dark",
-    "High": "text-light",
-    "Critical": "text-light"
+    "High": "text-white",
+    "Critical": "text-white"
 };
 const pageElements = {
     title: document.querySelector("#pageTitle"),

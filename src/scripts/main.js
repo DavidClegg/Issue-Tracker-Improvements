@@ -52,6 +52,9 @@ function populateUserOption(user, target = form.memberSelect){
 
 form.body.addEventListener("submit", e=>{
     e.preventDefault();
+    if(e.submitter == document.querySelector("button#cancel")){
+        return;
+    }
     console.log("ADD ISSUE")
     // get data from elements
     let summary = form.issueSummary.value;

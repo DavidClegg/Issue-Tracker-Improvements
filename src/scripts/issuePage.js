@@ -11,7 +11,7 @@ console.log(issueMember);
 
 
 const priorityStyle = {"Low":"bg-info","Medium":"bg-warning","High":"bg-danger","Critical":"bg-dark"}
-const priorityTextStyle = {"Low":"text-dark","Medium":"text-dark","High":"text-light","Critical":"text-light"}
+const priorityTextStyle = {"Low":"text-dark","Medium":"text-dark","High":"text-white","Critical":"text-white"}
 
 const pageElements = {
     title : document.querySelector("#pageTitle"),
