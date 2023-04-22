@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"3H9DN":[function(require,module,exports) {
+})({"bYjGk":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0c81360724fd2959";
+module.bundle.HMR_BUNDLE_ID = "dbd1d05fbf170107";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,87 +556,147 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"6TcLu":[function(require,module,exports) {
-// add existing team to page
-var _tools = require("../scripts/tools");
-var _data = require("../scripts/data");
-const userSection = document.querySelector("#users");
-(0, _data.users).forEach((user)=>{
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
-});
-const images = [
-    "../../dist/assets/users/craig_steward.jpg",
-    "../../dist/assets/users/ethan_addy.jpg",
-    "../../dist/assets/users/hannah_rogers.jpg",
-    "../../dist/assets/users/heather_walters.jpg",
-    "../../dist/assets/users/ida_johansen.jpg",
-    "../../dist/assets/users/lea_ross.jpg",
-    "../../dist/assets/users/raj_saldanha.jpg",
-    "../../dist/assets/users/wesley_cooper.jpg"
-];
-// validifying the add user input
-const form = document.querySelector("#addMemberForm");
-const firstNameInput = document.querySelector("#firstName");
-const lastNameInput = document.querySelector("#lastName");
-const imageInput = document.querySelector("#imageInput"); // Don't bother doing anything with this
-const submitButton = document.querySelector("#addMember");
-const valid = (element)=>element.setCustomValidity("");
-const invalid = (element)=>element.setCustomValidity("Invalid");
-const nameRegex = /[a-zA-Z]+/;
-function validateForm() {
-    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && // imageInput.files[0].size < 10000 && // There's no need to actually check this
-    lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
-    return isValid;
+},{}],"aryXu":[function(require,module,exports) {
+// // Import users, issues, logs
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "users", ()=>users);
+parcelHelpers.export(exports, "issues", ()=>issues);
+parcelHelpers.export(exports, "issueLogs", ()=>issueLogs);
+var _teamJson = require("../../dist/assets/data/team.json");
+var _teamJsonDefault = parcelHelpers.interopDefault(_teamJson);
+var _issuesJson = require("../../dist/assets/data/issues.json");
+var _issuesJsonDefault = parcelHelpers.interopDefault(_issuesJson);
+var _issueLogsJson = require("../../dist/assets/data/issueLogs.json");
+var _issueLogsJsonDefault = parcelHelpers.interopDefault(_issueLogsJson);
+let users = [];
+let issues = [];
+let issueLogs = [];
+// if localstorage
+localStorage.getItem("team") ? users = fromLocal("team") : users = Object.values((0, _teamJsonDefault.default));
+localStorage.getItem("issues") ? issues = fromLocal("issues") : issues = Object.values((0, _issuesJsonDefault.default));
+localStorage.getItem("issueLogs") ? issueLogs = fromLocal("issueLogs") : issueLogs = Object.values((0, _issueLogsJsonDefault.default));
+function fromLocal(storageName) {
+    let itemString = localStorage.getItem(storageName);
+    let sanitisedString = itemString.replaceAll("},", "}|");
+    let arrayOfStrings = sanitisedString.split("|");
+    let arrayOfObjects = arrayOfStrings.map((item)=>JSON.parse(item));
+    return arrayOfObjects;
 }
-firstNameInput.addEventListener("input", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-firstNameInput.addEventListener("click", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-lastNameInput.addEventListener("input", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(lastNameInput) : invalid(lastNameInput));
-lastNameInput.addEventListener("click", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(nameInput) : invalid(lastNameInput));
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    console.log(e);
-    if (e.submitter == document.querySelector("button#cancel")) return;
-    // Add code to add user
-    let MorF = [
-        "men",
-        "women"
-    ][Math.floor(Math.random() * 2)];
-    let imageIndex = Math.floor(Math.random() * 100);
-    let randomImage = `https://randomuser.me/api/portraits/${MorF}/${imageIndex}.jpg`;
-    let user = new (0, _tools.UserObject)(firstNameInput.value, lastNameInput.value, randomImage, (0, _data.users));
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
-    console.log("Yay, you added a new member! \uD83E\uDD73");
-    console.log({
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value
-    });
-    // Save users
-    (0, _data.users).push(user);
-    localStorage.setItem("team", (0, _data.users).map((user)=>JSON.stringify(user)).toString());
-    form.reset();
-    submitButton.setAttribute("disabled", "");
-});
-form.addEventListener("input", (e)=>{
-    let isValid = validateForm();
-    isValid ? submitButton.removeAttribute("disabled") : submitButton.setAttribute("disabled", "");
-});
-// image validation
-imageInput.addEventListener("input", (e)=>{
-    // console.log(imageInput.files[0].size)
-    if (imageInput.files[0].size <= 10000) {
-        valid(imageInput);
-        // console.log("Valid Image")
-        document.querySelector("#fileInvalid").style.display = "none";
-    } else {
-        invalid(imageInput);
-        // console.error("Invalid Image")
-        document.querySelector("#fileInvalid").style.display = "block";
-    }
-});
+localStorage.setItem("team", users.map((user)=>JSON.stringify(user)).toString());
+localStorage.setItem("issues", issues.map((issue)=>JSON.stringify(issue)).toString()); // localStorage.setItem("issueLogs", issueLogObject);
+ // export function save(target, data){}
+ // // The data-handling module for Users, Issues, and Logs(unimplemented)
+ // class Data{
+ //     constructor(storageName = ""){
+ //         this.array = [];
+ //         this.storageName = storageName;
+ //         // return this.array;
+ //     }
+ //     fromLocalStorage(storageName = this.storageName){
+ //         let itemString  = localStorage.getItem(storageName)
+ //         // replacing the comma seperator with an uncommon symbol to make splitting easier
+ //         let sanitisedString = itemString.replaceAll("},", "}|")
+ //         let arrayOfStrings = sanitisedString.split("|")
+ //         let arrayOfObjects = arrayOfStrings.map(item =>JSON.parse(item));
+ //         this.array = arrayOfObjects;
+ //     }
+ //     fromFile(fileObject){
+ //         // The file should always be a JSON object
+ //         this.array = [...Object.values(fileObject)];
+ //     }
+ //     save(storageName = this.storageName){
+ //         if(storageName == ""){
+ //             console.error("No Storage Name Given")
+ //             return;
+ //         }
+ //         let stringArray = this.array.map(item => JSON.stringify(item))
+ //         let string = stringArray.toString()
+ //         localStorage.setItem(storageName, string)
+ //     }
+ //     toArray(){
+ //         return this.array
+ //     }
+ // }
+ // // Users
+ // export const users = new Data("team");
+ // import teamJSON from "../../dist/assets/data/team.json";
+ // if(localStorage.getItem(users.storageName) == null){
+ //     if(Object.values(teamJSON).length > 0){
+ //         users.fromFile(teamJSON)
+ //     } 
+ // } else {
+ //     users.fromLocalStorage()
+ // }
+ // console.log("Users")
+ // console.log(users)
+ // users.save(); 
+ // // This is just a redundency to make sure there is a localStorage version of the array, in case it didn't already exist
+ // // Issues
+ // export const issues = new Date("issues");
+ // // import issuesJSON from "../../dist/assets/data/issues.json";
+ // if(localStorage.getItem(issues.storageName) == null){
+ //     // if(Object.values(issuesJSON).length > 0){
+ //     //     issues.fromFile(issuesJSON)
+ //     // } 
+ // } else {
+ //     issues.fromLocalStorage()
+ // }
+ // console.log("Issues")
+ // console.log(issues)
+ // // issues.save(); 
+ // // Log // Not Implemented Yet
+ // // export const log = new Date("issueLog");
+ // // import issueLogJSON from "../../dist/assets/data/issueLog.json";
+ // // if(localStorage.getItem(log.storageName) == null){
+ // //     if(Object.values(issueLogJSON).length > 0){
+ // //         log.fromFile(issueLogJSON)
+ // //     } 
+ // // } else {
+ // //     log.fromLocalStorage()
+ // // }
+ // // log.save(); 
 
-},{"../scripts/tools":"httsp","../scripts/data":"aryXu"}],"httsp":[function(require,module,exports) {
+},{"../../dist/assets/data/team.json":"lI96l","../../dist/assets/data/issues.json":"cocnQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../dist/assets/data/issueLogs.json":"lCRj0"}],"lI96l":[function(require,module,exports) {
+module.exports = JSON.parse('{"tm1":{"id":"tm1","firstName":"Lea","lastName":"Ross","imgSrc":"./assets/users/lea_ross.jpg","issuesAssigned":0},"tm2":{"id":"tm2","firstName":"Ida","lastName":"Johansen","imgSrc":"./assets/users/ida_johansen.jpg","issuesAssigned":0},"tm3":{"id":"tm3","firstName":"Heather","lastName":"Walters","imgSrc":"./assets/users/heather_walters.jpg","issuesAssigned":0},"tm4":{"id":"tm4","firstName":"Ethan","lastName":"Addy","imgSrc":"./assets/users/ethan_addy.jpg","issuesAssigned":0},"tm5":{"id":"tm5","firstName":"Raj","lastName":"Saldanha","imgSrc":"./assets/users/raj_saldanha.jpg","issuesAssigned":0},"tm6":{"id":"tm6","firstName":"Hannah","lastName":"Rogers","imgSrc":"./assets/users/hannah_rogers.jpg","issuesAssigned":0},"tm7":{"id":"tm7","firstName":"Craig","lastName":"Steward","imgSrc":"./assets/users/craig_steward.jpg","issuesAssigned":0},"tm8":{"id":"tm8","firstName":"Wesley","lastName":"Cooper","imgSrc":"./assets/users/wesley_cooper.jpg","issuesAssigned":0}}');
+
+},{}],"cocnQ":[function(require,module,exports) {
+module.exports = JSON.parse('{"is0":{"id":"is0","summary":"officia","descript":"Nisi velit laborum laborum ipsum in sunt aliquip est. Enim dolore laborum laboris anim minim labore id deserunt ipsum quis laboris consequat. Labore ullamco sunt veniam Lorem laboris et fugiat ea adipisicing velit et esse. Lorem ad id aute minim aute aliqua.\\r\\n","assigneeID":"tm8","priority":"Critical","status":"Resolved","dateStart":1682203782272,"dateDue":1683710750110},"is1":{"id":"is1","summary":"labore aliqua aliquip fugiat incididunt","descript":"Sunt consequat in mollit reprehenderit laborum duis eiusmod duis. Dolore consectetur ullamco excepteur eu nisi dolor fugiat. Magna do ut nostrud laborum et. Eiusmod consectetur pariatur do aliquip aliqua enim. Adipisicing anim anim consequat eiusmod velit officia sint dolor ullamco et minim sint veniam minim.\\r\\n","assigneeID":"tm5","priority":"High","status":"Closed","dateStart":1681776189931,"dateDue":1686047427878},"is2":{"id":"is2","summary":"aliqua labore excepteur dolore amet","descript":"Non enim elit aliquip eiusmod nostrud laboris in Lorem minim tempor aute proident eu occaecat. Ex in eiusmod magna nisi do ad mollit amet tempor commodo quis quis. Eu fugiat proident cillum ipsum sit duis adipisicing sunt. Laborum esse laborum in consequat labore dolor sint ad culpa non labore ut ullamco enim. Incididunt sint incididunt cillum duis nulla adipisicing culpa duis dolore aute sint. Sunt ipsum amet elit fugiat enim deserunt nulla reprehenderit. Amet proident labore cupidatat laborum consequat eu veniam dolore minim.\\r\\n","assigneeID":"tm5","priority":"Medium","status":"In Progress","dateStart":1685165240818,"dateDue":1685906147796},"is3":{"id":"is3","summary":"ipsum nostrud pariatur","descript":"Sunt dolor voluptate excepteur veniam ex eiusmod cupidatat do laboris cillum ipsum commodo. Do veniam enim sit ad eiusmod do cupidatat esse ea id amet minim deserunt. Esse velit dolore est fugiat ullamco occaecat ullamco. Minim labore ullamco exercitation nostrud deserunt ad aliqua enim dolor sunt quis voluptate eiusmod commodo. Tempor magna id tempor nisi Lorem. Non excepteur sint mollit dolore anim dolore ut officia reprehenderit duis irure.\\r\\n","assigneeID":"tm7","priority":"Low","status":"Closed","dateStart":1687681938759,"dateDue":1689926327881},"is4":{"id":"is4","summary":"tempor sit culpa est laboris","descript":"Dolor esse veniam amet velit aliqua ipsum consequat elit nisi est quis exercitation sint sunt. Labore incididunt incididunt pariatur aute deserunt nisi culpa non. Magna voluptate pariatur cillum magna ad.\\r\\n","assigneeID":"tm8","priority":"Low","status":"New","dateStart":1682906910020,"dateDue":1688974811093},"is5":{"id":"is5","summary":"id","descript":"Anim consectetur reprehenderit sunt veniam non. Ex nisi sit aute fugiat. Reprehenderit adipisicing consectetur est nulla do anim veniam occaecat amet. Veniam dolore sint reprehenderit consectetur cillum mollit sunt cillum officia et qui ex non aliquip. Eiusmod ipsum aliquip duis aliquip duis aliquip mollit sint consequat cillum pariatur ex laboris minim. Exercitation laborum esse enim officia non in exercitation dolor fugiat aliqua est veniam tempor. Et voluptate cupidatat mollit occaecat adipisicing nulla labore dolor voluptate dolor officia veniam.\\r\\n","assigneeID":"tm1","priority":"High","status":"Closed","dateStart":1683074575125,"dateDue":1688923243454},"is6":{"id":"is6","summary":"qui","descript":"Officia proident ea elit veniam aliquip. Ipsum laborum exercitation enim sint sunt. Amet id laboris magna deserunt.\\r\\n","assigneeID":"tm5","priority":"Low","status":"Closed","dateStart":1685578577311,"dateDue":1686935589327},"is7":{"id":"is7","summary":"tempor","descript":"Eu cillum laboris deserunt veniam eu ad ullamco ea mollit. Veniam incididunt labore pariatur labore quis culpa quis voluptate magna fugiat cupidatat magna. Esse magna minim cupidatat pariatur est velit eiusmod sunt Lorem amet. Sint elit ipsum nulla aute cillum aliqua.\\r\\n","assigneeID":"tm3","priority":"High","status":"In Progress","dateStart":1682807944304,"dateDue":1685901619526},"is8":{"id":"is8","summary":"irure","descript":"Do labore ut occaecat sit sunt labore nisi et adipisicing. Et est anim incididunt voluptate cillum non. Cillum adipisicing quis commodo anim incididunt anim in dolor ullamco ullamco. Quis ex laboris commodo occaecat fugiat voluptate aute.\\r\\n","assigneeID":"tm5","priority":"High","status":"Closed","dateStart":1686440982098,"dateDue":1692898299228},"is9":{"id":"is9","summary":"do","descript":"Laborum ea laborum consequat Lorem. Sit labore adipisicing occaecat velit laborum est mollit incididunt ea. Pariatur nostrud in exercitation fugiat eu duis elit dolor adipisicing irure.\\r\\n","assigneeID":"tm8","priority":"Low","status":"In Progress","dateStart":1685710260765,"dateDue":1688774922438},"is10":{"id":"is10","summary":"quis labore","descript":"Et cillum occaecat est eiusmod exercitation. Lorem esse qui amet cillum proident enim laboris aliqua id occaecat. Consequat nostrud dolor magna in commodo in veniam consectetur sit non laboris labore quis. Occaecat mollit dolore magna nisi enim veniam. Deserunt quis exercitation consectetur cupidatat dolor velit. Do excepteur tempor nulla ad et veniam fugiat consequat do et.\\r\\n","assigneeID":"tm2","priority":"Medium","status":"In Progress","dateStart":1684614619893,"dateDue":1685608396020},"is11":{"id":"is11","summary":"nulla elit cupidatat aliqua ullamco","descript":"Elit exercitation nisi id id deserunt cupidatat velit mollit in id qui aliquip. Ipsum do duis dolore dolore anim. Quis minim id pariatur ullamco dolore exercitation labore. Amet mollit laboris minim est consequat pariatur consequat. Dolore non in officia occaecat sit. Fugiat labore id in non ea ad ad Lorem adipisicing ut enim cupidatat consequat sit. Minim et in minim id sint occaecat in reprehenderit mollit exercitation nulla do nisi.\\r\\n","assigneeID":"tm5","priority":"Low","status":"Closed","dateStart":1682448441641,"dateDue":1688626842208},"is12":{"id":"is12","summary":"non ea laborum culpa","descript":"Ea ex occaecat pariatur cillum amet culpa magna irure nostrud culpa consectetur minim culpa duis. Ipsum laborum et aute enim laboris. Id excepteur id consequat fugiat commodo consectetur pariatur qui id officia magna consectetur pariatur. Enim quis amet veniam deserunt sunt minim reprehenderit nostrud eu minim nisi ad id amet. Aute laborum proident qui aliquip qui qui Lorem voluptate duis elit occaecat veniam reprehenderit. Ipsum velit anim proident magna magna in in sint pariatur excepteur ad anim. Eiusmod esse non dolore consequat occaecat enim consequat exercitation Lorem laboris consequat.\\r\\n","assigneeID":"tm6","priority":"High","status":"Resolved","dateStart":1686917238416,"dateDue":1690014321570},"is13":{"id":"is13","summary":"elit id","descript":"Excepteur ad reprehenderit adipisicing labore duis sit dolor non laborum dolor aute. Eu id cillum magna excepteur pariatur cillum ex sit proident pariatur. Esse qui sint exercitation ullamco sit id do officia. Cupidatat sint sint id fugiat excepteur laborum quis exercitation incididunt velit non duis labore ipsum. Tempor minim dolor pariatur est dolore ad excepteur sint ex ad eiusmod et cillum. Voluptate exercitation cillum fugiat amet incididunt officia excepteur pariatur mollit. Incididunt consequat tempor quis reprehenderit anim labore.\\r\\n","assigneeID":"tm2","priority":"High","status":"In Progress","dateStart":1682864151197,"dateDue":1686278657111},"is14":{"id":"is14","summary":"consectetur id","descript":"Commodo nulla incididunt Lorem id commodo. Sint enim tempor exercitation sunt reprehenderit adipisicing sint velit et anim in et. Reprehenderit enim ut anim anim laboris ex commodo do enim anim est velit minim. Eu consequat fugiat sunt nostrud cillum ipsum. Veniam veniam enim elit aute. Ea labore amet ullamco irure ullamco qui esse voluptate id.\\r\\n","assigneeID":"tm6","priority":"Medium","status":"New","dateStart":1684985066891,"dateDue":1685900343205},"is15":{"id":"is15","summary":"anim magna ea","descript":"Lorem ipsum eu laborum labore ipsum adipisicing et velit nisi in. In exercitation dolore reprehenderit anim ut Lorem officia ex eiusmod fugiat ea adipisicing adipisicing nulla. Laboris aliquip commodo in minim culpa minim ex. Id aute reprehenderit velit ut. Sunt laborum magna nostrud minim in culpa mollit velit. Cillum aute voluptate sunt ullamco.\\r\\n","assigneeID":"tm4","priority":"Critical","status":"Closed","dateStart":1683507220977,"dateDue":1685281161266},"is16":{"id":"is16","summary":"excepteur exercitation exercitation ad","descript":"Aliquip excepteur culpa duis eiusmod laboris occaecat veniam. Commodo ad nulla est dolore ullamco id quis labore commodo est. Minim esse tempor pariatur esse ad duis dolor pariatur ipsum culpa incididunt deserunt ea. Adipisicing cupidatat occaecat nulla consectetur mollit adipisicing consectetur adipisicing aliquip ea quis est ex amet. Tempor commodo fugiat laborum dolor ullamco ex. Id dolor excepteur quis sunt dolor consectetur cillum reprehenderit deserunt. Ullamco magna dolore qui sint aliquip.\\r\\n","assigneeID":"tm2","priority":"Medium","status":"In Progress","dateStart":1683726823617,"dateDue":1688798965271},"is17":{"id":"is17","summary":"proident sit","descript":"Et enim Lorem do enim ex. Minim voluptate amet ullamco id esse. Enim sint irure nostrud excepteur quis id pariatur amet sit ad eu eu ad. Enim minim culpa est cupidatat culpa eiusmod. Amet excepteur mollit ipsum anim duis eu et quis qui.\\r\\n","assigneeID":"tm4","priority":"Critical","status":"Closed","dateStart":1688013212152,"dateDue":1690788206866},"is18":{"id":"is18","summary":"do eiusmod sunt","descript":"Velit minim esse dolor pariatur officia laborum consequat aliqua in ad. Ullamco et nostrud voluptate nulla eu anim proident commodo proident esse amet. Amet officia excepteur laborum incididunt consectetur sunt laboris voluptate magna id sint ullamco laborum. Quis duis consectetur labore velit. Incididunt ad adipisicing excepteur nisi cupidatat nisi. Exercitation incididunt fugiat commodo incididunt laboris nisi ipsum minim consectetur fugiat dolor voluptate.\\r\\n","assigneeID":"tm5","priority":"Medium","status":"Closed","dateStart":1684259233097,"dateDue":1686344632235},"is19":{"id":"is19","summary":"sunt consectetur ullamco","descript":"Nostrud do consequat qui officia ex est nostrud. Qui nisi do incididunt magna officia laboris. Eiusmod mollit eiusmod nostrud duis dolor eiusmod sint excepteur velit ipsum laboris. Duis esse qui minim non amet incididunt aliqua consequat minim enim. Mollit mollit ullamco dolore nulla velit et do non deserunt cillum reprehenderit ut elit elit. Ipsum pariatur proident elit consectetur irure commodo est. Magna adipisicing pariatur irure nostrud pariatur pariatur minim aute.\\r\\n","assigneeID":"tm5","priority":"Medium","status":"New","dateStart":1682912388061,"dateDue":1687214985970},"is20":{"id":"is20","summary":"occaecat enim veniam reprehenderit","descript":"Eiusmod nostrud est incididunt pariatur ad ea excepteur. Ea minim ex elit exercitation qui laboris aliquip ut qui ex magna ad sunt. Ex aliquip nulla est ullamco anim ea voluptate quis sunt. Tempor excepteur magna consectetur aliquip sunt esse magna anim consectetur laborum est. Labore nisi exercitation cupidatat id voluptate reprehenderit laboris nostrud pariatur ex ea anim anim.\\r\\n","assigneeID":"tm6","priority":"Medium","status":"Resolved","dateStart":1685613804885,"dateDue":1691318184832},"is21":{"id":"is21","summary":"fugiat officia voluptate ullamco voluptate","descript":"Est commodo aliquip sunt minim eiusmod. Eiusmod commodo ex reprehenderit dolor cupidatat qui. Non laboris aliqua id ipsum incididunt occaecat esse.\\r\\n","assigneeID":"tm4","priority":"Low","status":"New","dateStart":1686565182619,"dateDue":1686894347723},"is22":{"id":"is22","summary":"est eu do","descript":"Nostrud magna non mollit Lorem culpa proident in in ipsum laborum in nostrud. Est voluptate est officia reprehenderit consectetur enim id sint. Veniam deserunt laboris minim laboris aute sint irure mollit eu amet ut nostrud. Eiusmod proident Lorem ad enim occaecat magna anim eu laboris officia qui sint aliquip. Esse id exercitation amet aliqua quis quis ex esse ipsum exercitation. Aliquip excepteur id laborum commodo amet veniam.\\r\\n","assigneeID":"tm3","priority":"Critical","status":"Resolved","dateStart":1685591567462,"dateDue":1686422655962},"is23":{"id":"is23","summary":"sunt deserunt cillum amet","descript":"Incididunt ad sit laborum proident aliqua voluptate. Occaecat exercitation aliqua minim labore ut. Occaecat sint culpa ullamco magna est occaecat excepteur aliqua non. Aute eu laboris laboris esse non veniam labore dolor nostrud. Culpa anim tempor fugiat cillum nisi dolor. Culpa esse ex aliquip ut qui anim commodo dolor nisi.\\r\\n","assigneeID":"tm6","priority":"Medium","status":"In Progress","dateStart":1682274355334,"dateDue":1686432951569},"is24":{"id":"is24","summary":"dolor qui voluptate est magna","descript":"Eu et eu in fugiat adipisicing Lorem ea non aute dolor. Est enim magna cupidatat laboris eu do amet ex amet. Ea excepteur ipsum irure consectetur dolor deserunt. Ea ex ipsum tempor aliquip voluptate tempor nostrud labore.\\r\\n","assigneeID":"tm3","priority":"Low","status":"New","dateStart":1683310265412,"dateDue":1687652725157},"is25":{"id":"is25","summary":"ad pariatur dolore mollit elit","descript":"Adipisicing laborum occaecat pariatur ullamco id proident dolore consequat enim sit laboris anim. Ea et magna incididunt sint minim pariatur. Cillum ullamco cillum nulla est tempor eu qui ex ullamco anim non id. Consequat aute ut nulla excepteur sit nulla mollit dolor mollit. Elit et consectetur nisi fugiat elit veniam pariatur esse nostrud ut sit duis.\\r\\n","assigneeID":"tm4","priority":"Medium","status":"New","dateStart":1683421620183,"dateDue":1686064360543},"is26":{"id":"is26","summary":"cupidatat et","descript":"Laboris dolor tempor qui fugiat reprehenderit. Quis consequat id magna ad eu culpa anim ex cillum. Cupidatat sunt exercitation anim aute anim aliquip proident ad proident. Ea aliquip do veniam irure fugiat sunt aliquip commodo est sit deserunt tempor eu aliquip. Ut irure veniam nulla proident magna exercitation ex. Laboris aliqua minim aute est eu aute dolore officia sit exercitation consequat.\\r\\n","assigneeID":"tm2","priority":"Critical","status":"Closed","dateStart":1683217550778,"dateDue":1687257837000},"is27":{"id":"is27","summary":"cupidatat labore ad cillum nulla","descript":"Mollit dolor aute laborum laborum non sint aliqua cupidatat laboris mollit. Commodo laboris nostrud mollit amet qui nulla pariatur nostrud quis occaecat nulla. Amet eiusmod voluptate adipisicing quis id Lorem nisi esse nulla elit incididunt. Tempor sunt anim sunt aliqua esse veniam cillum aute occaecat ad anim. In ut esse do eu proident. Sint anim incididunt laboris ad et. Cupidatat laborum dolore voluptate ad.\\r\\n","assigneeID":"tm5","priority":"Low","status":"New","dateStart":1683148985582,"dateDue":1689515731644},"is28":{"id":"is28","summary":"irure mollit laboris dolor tempor","descript":"Ullamco et eiusmod mollit eiusmod voluptate proident proident esse. Eiusmod tempor est ex Lorem dolor laboris esse. Exercitation pariatur ad elit velit deserunt sunt sint aliquip officia esse. Non mollit consequat nulla veniam. Fugiat eiusmod adipisicing sunt fugiat esse consectetur ad veniam in ullamco deserunt. Fugiat minim sunt veniam laborum eiusmod dolor officia laboris. Nostrud veniam irure in reprehenderit exercitation cupidatat.\\r\\n","assigneeID":"tm2","priority":"Low","status":"In Progress","dateStart":1683324860125,"dateDue":1684377890970},"is29":{"id":"is29","summary":"sunt in proident voluptate","descript":"Est commodo adipisicing aliqua nostrud aliqua voluptate consectetur fugiat. Lorem deserunt et labore voluptate elit aliquip. Duis irure id laboris ad et exercitation veniam sit ullamco voluptate magna. Eu sint culpa nulla consectetur sunt veniam dolore consectetur laborum. Id et aliquip ipsum minim ea tempor ad.\\r\\n","assigneeID":"tm6","priority":"Medium","status":"Closed","dateStart":1685282441073,"dateDue":1691149414713}}');
+
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"lCRj0":[function(require,module,exports) {
+module.exports = JSON.parse("{}");
+
+},{}],"httsp":[function(require,module,exports) {
 // User Object and Element functions
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -791,8 +851,24 @@ function random(min = 0, max) {
     // This is to create junk data
     return Math.floor(min + Math.random() * (max - min));
 }
-function save() {}
+function save() {} /**
+ * Used https://json-generator.com/ to generate the issue data with:
+[
+  '{{repeat(30)}}',
+  {
+    id: 'is' + '{{index()}}',
+    summary: '{{lorem(integer(1,5), "words")}}',
+    descript: '{{lorem(1, "paragraphs")}}',
+    assigneeID: 'tm' + '{{integer(1,8)}}',
+    priority:'{{random("Low", "Medium", "High", "Critical")}}', //
+    status:'{{random("New", "In Progress", "Resolved", "Closed")}}', //
+    dateStart:'{{integer(1681430400000, 1688083200000)}}',
+    dateDue:function () { return this.dateStart + Math.floor(Math.random() * 6652800000); }
+  }
+]
+then needed to add the id to each object manually
+ */ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3H9DN","6TcLu"], "6TcLu", "parcelRequirec1be")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bYjGk"], null, "parcelRequirec1be")
 
-//# sourceMappingURL=team.24fd2959.js.map
+//# sourceMappingURL=index.bf170107.js.map

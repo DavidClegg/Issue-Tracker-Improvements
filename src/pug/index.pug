@@ -45,6 +45,15 @@ block page-content
                             td=issue.s
                             td 2023-04-29
                             td Ida Johansen
+                //- Trying to sort issues
+                each priority in ["Critical", "High", "Medium", "Low"]
+                    each status in ["New", "In_Progress", "Resolved"]
+                        tbody(id="issueTable" + priority+status)
+            //- 
+                tbody#issueTableCriticalNew.table-group-divider
+                tbody#issueTableHigh.table-group-divider
+                tbody#issueTableMedium.table-group-divider
+                tbody#issueTableLow.table-group-divider
                 
 
     div#issueModal.modal.fade(tabindex="-1")
@@ -120,7 +129,7 @@ block page-content
                                         div.invalid-msg Select a valid due date! 
 
                         .modal-footer 
-                            button.btn.btn-secondary(data-mdb-dismiss="modal") Close
+                            button#cancel.btn.btn-secondary(data-mdb-dismiss="modal") Close
                             button#addIssue.btn.btn-primary(type="submit",data-mdb-dismiss="modal" disabled="") Save
     
     script(src="../scripts/main.js" type="module")

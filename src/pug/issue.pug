@@ -1,0 +1,79 @@
+//- Page for individual issue, with an ID passed at the part of the url
+//- Use window.location.search, and then use regex
+
+extends basepage.pug 
+
+block page-name 
+    .nav-link.brand
+        .brand__name
+            h3 Issue Details
+
+block page-content
+    section 
+        h1#pageTitle No Issue Selected 
+        article 
+            .row.justify-content-end.mb-3.gap-3
+                button#EditIssue.btn.btn-primary.col-md-3(type="button") Edit Issue
+                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") 
+                    strong Remove Issue
+            .container
+                .row.gx-5
+                    .col-md-4
+                        .row
+                            .col-md-6
+                                strong ID
+                            .col-md-6
+                                p#issueIDElement is00X
+                            hr
+                        .row
+                            .col-md-6.d-flex.align-items-center
+                                img#assigneeImage.rounded-circle(src="https://mdbootstrap.com/img/new/avatars/8.jpg",alt="",style="width: 45px; height: 45px")
+                                .ms-3
+                            .col-md-6.d-flex.align-items-center
+                                p#assigneeName.mb-1 John Doe
+                            hr.mt-2
+                        .row
+                            .col-md-6
+                                strong Start Date
+                            .col-md-6
+                                p#startDateElement 22-04-2023
+                            hr
+                        .row
+                            .col-md-6
+                                strong Due Date
+                            .col-md-6
+                                p#dueDateElement 22-04-2023
+                    .col-md-8
+                        .row.gx-3
+                            .col-md-6
+                                p.text-center#issueStatusElement In Progress 
+                                hr
+                            .col-md-6 
+                                p#issuePriorityElement.text-center.mb-0.pb-2.pt-2 Medium
+                                hr.mt-0 
+                        .row.gx-2
+                            p#issueSummaryElement Lorem ipsum dolor
+                            hr
+                        .row.gx-2
+                            .col-md-8
+                                p#issueDescriptionElement Lorem ipsum dolor sit, amet consectetur adipisicing elit. In suscipit dicta voluptatum incidunt? A maiores ab libero. Vero iste omnis consequatur porro pariatur. Perspiciatis, alias culpa! Harum at commodi voluptas.
+            .accordion
+                .accordion-item 
+                    h2.accordion-header
+                        button.accordion-button.collapsed(data-mdb-toggle="collapse",data-mdb-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne") Show Change Log 
+                    #collapseOne.accordion-collapse.collapse(data-mdb-parent="#accordionExample")
+                        .accordion-body
+                            table 
+                                thead
+                                    th time
+                                    th field
+                                    th change
+                                tbody#issueLogTable
+                                    tr 
+                                        td 1681430400000
+                                        td Descrption 
+                                        td This is my changed description example
+    script(src="../scripts/issuePage.js", type="module") 
+    //- I'm really proud of this page. It's simple and effective.
+    //- But I think it would be best to turn this basically into a form.
+    //- That means trashing the whole things and going with something else.

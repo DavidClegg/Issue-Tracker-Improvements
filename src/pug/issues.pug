@@ -5,7 +5,25 @@ block page-name
         .brand__name
             h3 Issues
 block page-content
-    h1 Issue Page
+    section
+        h1 Active Issues
+        article#issues
+            .row.justify-content-end.mb-3.gap-3
+                button#EditIssue.btn.btn-primary.col-md-3(type="button") Add Issue
+                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") 
+                    strong Remove Issues
+            table.table.align-middle.bg-white.table-hover 
+                thead.bg-light 
+                    th Issue ID
+                    th Summary
+                    th Priority
+                    th Status
+                    th Due Date
+                    th Assigned To
+                tbody#issueTable.table-group-divider 
 
-    
-    script(src="../scripts/issues.js") 
+    script(src="../scripts/issues.js", type="module")
+
+    //- This just exists to get Parcel to build the issue page
+    //- It turns out parcel only builds a page if it's linked to
+    a(href="issue.pug").hide 

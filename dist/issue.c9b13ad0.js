@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"1UkUz":[function(require,module,exports) {
+})({"3l1m3":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "97ca689cfceeff69";
+module.bundle.HMR_BUNDLE_ID = "2781b57fc9b13ad0";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,8 +556,61 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"gwn6w":[function(require,module,exports) {
+},{}],"9lQtv":[function(require,module,exports) {
+// get issue
+var _dataJs = require("../scripts/data.js");
+const urlMatch = /\?is[0-9]+/;
+const validTarget = urlMatch.test(window.location.search);
+const targetID = validTarget ? urlMatch.exec(window.location.search)[0].replace("?", "") : "NO VALID ISSUE";
+console.log(targetID);
+const targetIssue = (0, _dataJs.issues).find((issue)=>issue.id == targetID);
+console.log(targetIssue);
+const issueMember = (0, _dataJs.users).find((user)=>user.id == targetIssue.assigneeID);
+console.log(issueMember);
+const priorityStyle = {
+    "Low": "bg-info",
+    "Medium": "bg-warning",
+    "High": "bg-danger",
+    "Critical": "bg-dark"
+};
+const priorityTextStyle = {
+    "Low": "text-dark",
+    "Medium": "text-dark",
+    "High": "text-white",
+    "Critical": "text-white"
+};
+const pageElements = {
+    title: document.querySelector("#pageTitle"),
+    id: document.querySelector("#issueIDElement"),
+    assignee: {
+        image: document.querySelector("#assigneeImage"),
+        name: document.querySelector("#assigneeName")
+    },
+    startdate: document.querySelector("#startDateElement"),
+    duedate: document.querySelector("#dueDateElement"),
+    status: document.querySelector("#issueStatusElement"),
+    priority: document.querySelector("#issuePriorityElement"),
+    summary: document.querySelector("#issueSummaryElement"),
+    description: document.querySelector("#issueDescriptionElement"),
+    logTable: document.querySelector("#issueLogTable")
+};
+pageElements.title.innerText = `Issue: ${targetIssue.id}`;
+pageElements.id.innerText = `${targetIssue.id}`;
+pageElements.assignee.image.src = issueMember.imgSrc;
+pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
+pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {
+    "dateStyle": "short"
+});
+pageElements.duedate.innerText = new Date(targetIssue.dateDue).toLocaleString("en-GB", {
+    "dateStyle": "short"
+});
+pageElements.status.innerText = targetIssue.status;
+pageElements.priority.innerText = targetIssue.priority;
+pageElements.priority.classList.add(priorityStyle[targetIssue.priority]);
+pageElements.priority.classList.add(priorityTextStyle[targetIssue.priority]); // changing this is going to be a bit of a pain
+pageElements.summary.innerText = targetIssue.summary;
+pageElements.description.innerText = targetIssue.description;
 
-},{}]},["1UkUz","gwn6w"], "gwn6w", "parcelRequirec1be")
+},{"../scripts/data.js":"aryXu"}]},["3l1m3","9lQtv"], "9lQtv", "parcelRequirec1be")
 
-//# sourceMappingURL=issues.fceeff69.js.map
+//# sourceMappingURL=issue.c9b13ad0.js.map
