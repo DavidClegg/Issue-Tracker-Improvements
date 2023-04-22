@@ -1,0 +1,23 @@
+//- Page for individual issue, with an ID passed at the part of the url
+//- Use window.location.search, and then use regex
+
+extends basepage.pug 
+
+block page-name 
+    .nav-link.brand
+        .brand__name
+            h3 Issue Details
+
+block page-content
+    section 
+        h1#issueID No Issue Selected 
+        article 
+            table.table.align-middle.bg-white.table-hover 
+                thead.bg-light 
+                    th Issue ID
+                    th Summary
+                    th Priority
+                    th Status
+                    th Due Date
+                    th Assigned To
+                tbody#issueTable.table-group-divider 

@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"3H9DN":[function(require,module,exports) {
+})({"lDYYY":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0c81360724fd2959";
+module.bundle.HMR_BUNDLE_ID = "c4217bdc647691e5";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,64 +556,28 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"6TcLu":[function(require,module,exports) {
-// add existing team to page
-var _tools = require("../scripts/tools");
-var _data = require("../scripts/data");
-const userSection = document.querySelector("#users");
-(0, _data.users).forEach((user)=>{
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
+},{}],"epjrU":[function(require,module,exports) {
+var _toolsJs = require("../scripts/tools.js");
+var _dataJs = require("../scripts/data.js");
+const priorityStyle = {
+    "Low": "table-info",
+    "Medium": "table-warning",
+    "High": "table-danger",
+    "Critical": "table-dark"
+};
+const tableBody = document.querySelector("#issueTable");
+const clearIssuesButton = document.querySelector("#clearIssuesButton");
+(0, _dataJs.issues).forEach((issue)=>{
+    let issueElement = (0, _toolsJs.CreateIssueElement)(issue, priorityStyle, (0, _dataJs.users));
+    (0, _toolsJs.addIssueElement)(issueElement, tableBody);
 });
-const images = [
-    "../../dist/assets/users/craig_steward.jpg",
-    "../../dist/assets/users/ethan_addy.jpg",
-    "../../dist/assets/users/hannah_rogers.jpg",
-    "../../dist/assets/users/heather_walters.jpg",
-    "../../dist/assets/users/ida_johansen.jpg",
-    "../../dist/assets/users/lea_ross.jpg",
-    "../../dist/assets/users/raj_saldanha.jpg",
-    "../../dist/assets/users/wesley_cooper.jpg"
-];
-// validifying the add user input
-const form = document.querySelector("#addMemberForm");
-const firstNameInput = document.querySelector("#firstName");
-const lastNameInput = document.querySelector("#lastName");
-const imageInput = document.querySelector("#image"); // Don't bother doing anything with this
-const submitButton = document.querySelector("#addMember");
-const valid = (element)=>element.setCustomValidity("");
-const invalid = (element)=>element.setCustomValidity("Invalid");
-const nameRegex = /[a-zA-Z]+/;
-function validateForm() {
-    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
-    return isValid;
-}
-firstNameInput.addEventListener("input", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-firstNameInput.addEventListener("click", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-lastNameInput.addEventListener("input", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(lastNameInput) : invalid(lastNameInput));
-lastNameInput.addEventListener("click", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(nameInput) : invalid(lastNameInput));
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    // Add code to add user
-    let user = new (0, _tools.UserObject)(firstNameInput.value, lastNameInput.value, images[Math.floor(Math.random() * images.length)], (0, _data.users));
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
-    console.log("Yay, you added a new member! \uD83E\uDD73");
-    console.log({
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value
-    });
-    // Add user to users
-    // Save users
-    form.reset();
-    submitButton.setAttribute("disabled", "");
-});
-form.addEventListener("input", (e)=>{
-    let isValid = validateForm();
-    isValid ? submitButton.removeAttribute("disabled") : submitButton.setAttribute("disabled", "");
+clearIssuesButton.addEventListener("click", (e)=>{
+    let choice = confirm("Are you sure you want to do this?");
+    console.log(choice);
+    choice ? console.log("NOOOO! WHAT HAVE YOU DONE!") : console.log("Oh, Thank god!");
 });
 
-},{"../scripts/data":"aryXu","../scripts/tools":"httsp"}],"aryXu":[function(require,module,exports) {
+},{"../scripts/data.js":"aryXu","../scripts/tools.js":"httsp"}],"aryXu":[function(require,module,exports) {
 // // Import users, issues, logs
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -920,6 +884,6 @@ function save() {} /**
 then needed to add the id to each object manually
  */ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3H9DN","6TcLu"], "6TcLu", "parcelRequirec1be")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["lDYYY","epjrU"], "epjrU", "parcelRequirec1be")
 
-//# sourceMappingURL=team.24fd2959.js.map
+//# sourceMappingURL=issues.647691e5.js.map
