@@ -28,15 +28,9 @@ function fromLocal(storageName){
     return arrayOfObjects;
 }
 
-
-
-
-
-
-
-
-
-
+localStorage.setItem("team", users.map(user=>JSON.stringify(user)).toString());
+localStorage.setItem("issues", issues.map(issue=>JSON.stringify(issue)).toString());
+// localStorage.setItem("issueLogs", issueLogObject);
 
 // export function save(target, data){}
 

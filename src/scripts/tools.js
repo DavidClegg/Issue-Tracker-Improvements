@@ -77,9 +77,11 @@ export function IssueObject(summary, description, assigneeID, priority, status, 
 export function CreateIssueElement(issue, priorityStyle, users){
     let row = document.createElement("tr");
     row.dataset.id = issue.id;
-    // // For Modal
-    row.dataset.mdbToggle = "modal"
-    row.dataset.mdbTarget = "#issueModal"
+    // // // For Modal
+    // row.dataset.mdbToggle = "modal"
+    // row.dataset.mdbTarget = "#issueModal"
+    // row.setAttribute('href',`/issue.html?${issue.id}`)
+    row.setAttribute("onclick", `window.location.href = "./issue.html?${issue.id}"`)
     // //
         let idCell = document.createElement("td");
         idCell.id = issue.id + "-idcell"
@@ -134,6 +136,8 @@ export function updateMemberIssueCount(users, issueArray){
         }
         updateUserElement(targetMember);
     })
+    
+    localStorage.setItem("team", users.map(user=>JSON.stringify(user)).toString());
 }
 export function random(min = 0, max){
     // This is to create junk data

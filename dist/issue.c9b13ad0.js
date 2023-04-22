@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"3H9DN":[function(require,module,exports) {
+})({"3l1m3":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0c81360724fd2959";
+module.bundle.HMR_BUNDLE_ID = "2781b57fc9b13ad0";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,236 +556,61 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"6TcLu":[function(require,module,exports) {
-// add existing team to page
-var _tools = require("../scripts/tools");
-var _data = require("../scripts/data");
-const userSection = document.querySelector("#users");
-(0, _data.users).forEach((user)=>{
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
+},{}],"9lQtv":[function(require,module,exports) {
+// get issue
+var _dataJs = require("../scripts/data.js");
+const urlMatch = /\?is[0-9]+/;
+const validTarget = urlMatch.test(window.location.search);
+const targetID = validTarget ? urlMatch.exec(window.location.search)[0].replace("?", "") : "NO VALID ISSUE";
+console.log(targetID);
+const targetIssue = (0, _dataJs.issues).find((issue)=>issue.id == targetID);
+console.log(targetIssue);
+const issueMember = (0, _dataJs.users).find((user)=>user.id == targetIssue.assigneeID);
+console.log(issueMember);
+const priorityStyle = {
+    "Low": "bg-info",
+    "Medium": "bg-warning",
+    "High": "bg-danger",
+    "Critical": "bg-dark"
+};
+const priorityTextStyle = {
+    "Low": "text-dark",
+    "Medium": "text-dark",
+    "High": "text-light",
+    "Critical": "text-light"
+};
+const pageElements = {
+    title: document.querySelector("#pageTitle"),
+    id: document.querySelector("#issueIDElement"),
+    assignee: {
+        image: document.querySelector("#assigneeImage"),
+        name: document.querySelector("#assigneeName")
+    },
+    startdate: document.querySelector("#startDateElement"),
+    duedate: document.querySelector("#dueDateElement"),
+    status: document.querySelector("#issueStatusElement"),
+    priority: document.querySelector("#issuePriorityElement"),
+    summary: document.querySelector("#issueSummaryElement"),
+    description: document.querySelector("#issueDescriptionElement"),
+    logTable: document.querySelector("#issueLogTable")
+};
+pageElements.title.innerText = `Issue: ${targetIssue.id}`;
+pageElements.id.innerText = `Issue: ${targetIssue.id}`;
+pageElements.assignee.image.src = issueMember.imgSrc;
+pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
+pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {
+    "dateStyle": "short"
 });
-const images = [
-    "../../dist/assets/users/craig_steward.jpg",
-    "../../dist/assets/users/ethan_addy.jpg",
-    "../../dist/assets/users/hannah_rogers.jpg",
-    "../../dist/assets/users/heather_walters.jpg",
-    "../../dist/assets/users/ida_johansen.jpg",
-    "../../dist/assets/users/lea_ross.jpg",
-    "../../dist/assets/users/raj_saldanha.jpg",
-    "../../dist/assets/users/wesley_cooper.jpg"
-];
-// validifying the add user input
-const form = document.querySelector("#addMemberForm");
-const firstNameInput = document.querySelector("#firstName");
-const lastNameInput = document.querySelector("#lastName");
-const imageInput = document.querySelector("#image"); // Don't bother doing anything with this
-const submitButton = document.querySelector("#addMember");
-const valid = (element)=>element.setCustomValidity("");
-const invalid = (element)=>element.setCustomValidity("Invalid");
-const nameRegex = /[a-zA-Z]+/;
-function validateForm() {
-    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
-    return isValid;
-}
-firstNameInput.addEventListener("input", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-firstNameInput.addEventListener("click", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
-lastNameInput.addEventListener("input", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(lastNameInput) : invalid(lastNameInput));
-lastNameInput.addEventListener("click", ()=>lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value) ? valid(nameInput) : invalid(lastNameInput));
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    // Add code to add user
-    let user = new (0, _tools.UserObject)(firstNameInput.value, lastNameInput.value, images[Math.floor(Math.random() * images.length)], (0, _data.users));
-    let element = new (0, _tools.CreateUserElement)(user);
-    (0, _tools.addUserElement)(element, userSection);
-    console.log("Yay, you added a new member! \uD83E\uDD73");
-    console.log({
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value
-    });
-    // Add user to users
-    // Save users
-    form.reset();
-    submitButton.setAttribute("disabled", "");
+pageElements.duedate.innerText = new Date(targetIssue.dateDue).toLocaleString("en-GB", {
+    "dateStyle": "short"
 });
-form.addEventListener("input", (e)=>{
-    let isValid = validateForm();
-    isValid ? submitButton.removeAttribute("disabled") : submitButton.setAttribute("disabled", "");
-});
+pageElements.status.innerText = targetIssue.status;
+pageElements.priority.innerText = targetIssue.priority;
+pageElements.priority.classList.add(priorityStyle[targetIssue.priority]);
+pageElements.priority.classList.add(priorityTextStyle[targetIssue.priority]); // changing this is going to be a bit of a pain
+pageElements.summary.innerText = targetIssue.summary;
+pageElements.description.innerText = targetIssue.description;
 
-},{"../scripts/data":"aryXu","../scripts/tools":"httsp"}],"httsp":[function(require,module,exports) {
-// User Object and Element functions
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "UserObject", ()=>UserObject);
-parcelHelpers.export(exports, "CreateUserElement", ()=>CreateUserElement);
-parcelHelpers.export(exports, "addUserElement", ()=>addUserElement);
-parcelHelpers.export(exports, "updateUserElement", ()=>updateUserElement);
-// Issue Object and Element functions
-parcelHelpers.export(exports, "IssueObject", ()=>IssueObject);
-parcelHelpers.export(exports, "CreateIssueElement", ()=>CreateIssueElement);
-parcelHelpers.export(exports, "addIssueElement", ()=>addIssueElement);
-parcelHelpers.export(exports, "updateIssueElement", ()=>updateIssueElement);
-// Extra tools
-parcelHelpers.export(exports, "updateMemberIssueCount", ()=>updateMemberIssueCount);
-parcelHelpers.export(exports, "random", ()=>random);
-function UserObject(firstName, lastName, imgSrc, usersArray = users) {
-    // This function creates a user object
-    /// This is to expand the number of users on a team
-    let randomNumber;
-    // I'm using a random number, but I should probably just use the length of the users array and just keep incrementing 
-    let collision = true;
-    while(collision){
-        randomNumber = Math.floor(Math.random() * 1000);
-        collision = false;
-        for (let user of usersArray)if (user.id == "tm" + randomNumber) collision = true;
-    }
-    return {
-        id: "tm" + randomNumber,
-        firstName: firstName,
-        lastName: lastName,
-        imgSrc: imgSrc,
-        issuesAssigned: 0
-    };
-}
-function CreateUserElement(user) {
-    let container = document.createElement("div");
-    container.classList.add("team-member");
-    container.id = user.id;
-    let image = document.createElement("img");
-    image.classList.add("avatar");
-    image.classList.add("rounded-circle");
-    image.classList.add("mb-3");
-    image.classList.add("shadow-4-strong");
-    image.alt = "avatar";
-    image.src = user.imgSrc;
-    let name = document.createElement("h5");
-    name.classList.add("mb-2");
-    name.innerText = `${user.firstName} ${user.lastName}`;
-    let issueDetail = document.createElement("p");
-    issueDetail.classList.add("text-muted");
-    issueDetail.classList.add("issue-detail");
-    let issuedNum = document.createElement("span");
-    issuedNum.classList.add("badge");
-    issuedNum.classList.add("issue-number");
-    issuedNum.innerText = user.issuesAssigned;
-    let assigned = document.createElement("span");
-    assigned.innerText = "Assigned";
-    issueDetail.appendChild(issuedNum);
-    issueDetail.appendChild(assigned);
-    container.appendChild(image);
-    container.appendChild(name);
-    container.appendChild(issueDetail);
-    return container;
-}
-function addUserElement(userElement, target = userSection) {
-    target.appendChild(userElement);
-}
-function updateUserElement(user) {
-    // Find user element on page
-    let oldUser = document.querySelector(`#${user.id}`);
-    let newUser = new CreateUserElement(user);
-    oldUser.replaceWith(newUser);
-}
-function IssueObject(summary, description, assigneeID, priority, status, dateStart, dateDue, issueArray) {
-    let issue = {
-        id: `is${issueArray.length}`,
-        summary,
-        description,
-        assigneeID,
-        priority,
-        status,
-        dateStart,
-        dateDue
-    };
-    return issue;
-}
-function CreateIssueElement(issue, priorityStyle, users1) {
-    let row = document.createElement("tr");
-    row.dataset.id = issue.id;
-    // // // For Modal
-    // row.dataset.mdbToggle = "modal"
-    // row.dataset.mdbTarget = "#issueModal"
-    // row.setAttribute('href',`/issue.html?${issue.id}`)
-    row.setAttribute("onclick", `window.location.href = "./issue.html?${issue.id}"`);
-    // //
-    let idCell = document.createElement("td");
-    idCell.id = issue.id + "-idcell";
-    idCell.innerText = issue.id;
-    let summaryCell = document.createElement("td");
-    summaryCell.id = issue.id + "-summarycell";
-    summaryCell.innerText = issue.summary;
-    let priorityCell = document.createElement("td");
-    priorityCell.id = issue.id + "-prioritycell";
-    priorityCell.innerText = issue.priority;
-    priorityCell.classList.add(priorityStyle[issue.priority]);
-    let statusCell = document.createElement("td");
-    statusCell.id = issue.id + "-statuscell";
-    statusCell.innerText = issue.status;
-    let dueCell = document.createElement("td");
-    dueCell.id = issue.id + "-duecell";
-    dueCell.innerText = new Date(issue.dateDue).toLocaleString("en-GB", {
-        "dateStyle": "short"
-    });
-    let assignCell = document.createElement("td");
-    assignCell.id = issue.id + "-assigncell";
-    let user = users1.find((user)=>user.id == issue.assigneeID);
-    assignCell.innerText = `${user.firstName} ${user.lastName}`;
-    row.appendChild(idCell);
-    row.appendChild(summaryCell);
-    row.appendChild(priorityCell);
-    row.appendChild(statusCell);
-    row.appendChild(dueCell);
-    row.appendChild(assignCell);
-    return row;
-}
-function addIssueElement(issueElement, target = issueTable) {
-    target.appendChild(issueElement);
-    // issueElement.addEventListener("click", updateIssueEvent)
-    issueElement.addEventListener("click", (e)=>console.log("Click"));
-}
-function updateIssueElement(issue) {
-    // This might also have to update the user.assignedIssues variables for both users
-    let oldIssue = document.querySelector(`#${issue.id}`);
-    let newIssue = new CreateIssueElement(issue);
-    oldIssue.replaceWith(newIssue);
-}
-function updateMemberIssueCount(users1, issueArray) {
-    let member;
-    let targetMember;
-    users1.forEach((user)=>user.issuesAssigned = 0);
-    issueArray.forEach((issue)=>{
-        if (issue.status != "Closed") {
-            member = issue.assigneeID;
-            targetMember = users1.find((user)=>user.id == member);
-            targetMember.issuesAssigned++;
-        }
-        updateUserElement(targetMember);
-    });
-    localStorage.setItem("team", users1.map((user)=>JSON.stringify(user)).toString());
-}
-function random(min = 0, max) {
-    // This is to create junk data
-    return Math.floor(min + Math.random() * (max - min));
-}
-function save() {} /**
- * Used https://json-generator.com/ to generate the issue data with:
-[
-  '{{repeat(30)}}',
-  {
-    id: 'is' + '{{index()}}',
-    summary: '{{lorem(integer(1,5), "words")}}',
-    descript: '{{lorem(1, "paragraphs")}}',
-    assigneeID: 'tm' + '{{integer(1,8)}}',
-    priority:'{{random("Low", "Medium", "High", "Critical")}}', //
-    status:'{{random("New", "In Progress", "Resolved", "Closed")}}', //
-    dateStart:'{{integer(1681430400000, 1688083200000)}}',
-    dateDue:function () { return this.dateStart + Math.floor(Math.random() * 6652800000); }
-  }
-]
-then needed to add the id to each object manually
- */ 
+},{"../scripts/data.js":"aryXu"}]},["3l1m3","9lQtv"], "9lQtv", "parcelRequirec1be")
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3H9DN","6TcLu"], "6TcLu", "parcelRequirec1be")
-
-//# sourceMappingURL=team.24fd2959.js.map
+//# sourceMappingURL=issue.c9b13ad0.js.map
