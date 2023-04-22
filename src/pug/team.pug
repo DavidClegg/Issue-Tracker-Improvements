@@ -33,10 +33,10 @@ block page-content
                                 label.form-label(for="name") Last Name
                             div.invalid-msg Include a Last Name!
                         .form-item.mb-4
-                            label.form-label(for="image") Image
+                            label.form-label(for="image") Image (8KB limit)
                             .form-outline
-                                input#image.form-control(type="file")
-                            div.invalid-msg No valid file!
+                            input#imageInput.form-control(type="file", accept="image/*")
+                            div.invalid-msg#fileInvalid Select a Valid Image!
 
                         .modal-footer 
                             button#cancel.btn.btn-secondary(data-mdb-dismiss="modal") Close

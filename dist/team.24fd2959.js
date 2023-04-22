@@ -579,13 +579,14 @@ const images = [
 const form = document.querySelector("#addMemberForm");
 const firstNameInput = document.querySelector("#firstName");
 const lastNameInput = document.querySelector("#lastName");
-const imageInput = document.querySelector("#image"); // Don't bother doing anything with this
+const imageInput = document.querySelector("#imageInput"); // Don't bother doing anything with this
 const submitButton = document.querySelector("#addMember");
 const valid = (element)=>element.setCustomValidity("");
 const invalid = (element)=>element.setCustomValidity("Invalid");
 const nameRegex = /[a-zA-Z]+/;
 function validateForm() {
-    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
+    let isValid = firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) && // imageInput.files[0].size < 10000 && // There's no need to actually check this
+    lastNameInput.value.length >= 1 && nameRegex.test(lastNameInput.value);
     return isValid;
 }
 firstNameInput.addEventListener("input", ()=>firstNameInput.value.length >= 1 && nameRegex.test(firstNameInput.value) ? valid(firstNameInput) : invalid(firstNameInput));
@@ -597,7 +598,13 @@ form.addEventListener("submit", (e)=>{
     console.log(e);
     if (e.submitter == document.querySelector("button#cancel")) return;
     // Add code to add user
-    let user = new (0, _tools.UserObject)(firstNameInput.value, lastNameInput.value, images[Math.floor(Math.random() * images.length)], (0, _data.users));
+    let MorF = [
+        "men",
+        "women"
+    ][Math.floor(Math.random() * 2)];
+    let imageIndex = Math.floor(Math.random() * 100);
+    let randomImage = `https://randomuser.me/api/portraits/${MorF}/${imageIndex}.jpg`;
+    let user = new (0, _tools.UserObject)(firstNameInput.value, lastNameInput.value, randomImage, (0, _data.users));
     let element = new (0, _tools.CreateUserElement)(user);
     (0, _tools.addUserElement)(element, userSection);
     console.log("Yay, you added a new member! \uD83E\uDD73");
@@ -605,8 +612,9 @@ form.addEventListener("submit", (e)=>{
         firstName: firstNameInput.value,
         lastName: lastNameInput.value
     });
-    // Add user to users
     // Save users
+    (0, _data.users).push(user);
+    localStorage.setItem("team", (0, _data.users).map((user)=>JSON.stringify(user)).toString());
     form.reset();
     submitButton.setAttribute("disabled", "");
 });
@@ -614,8 +622,21 @@ form.addEventListener("input", (e)=>{
     let isValid = validateForm();
     isValid ? submitButton.removeAttribute("disabled") : submitButton.setAttribute("disabled", "");
 });
+// image validation
+imageInput.addEventListener("input", (e)=>{
+    // console.log(imageInput.files[0].size)
+    if (imageInput.files[0].size <= 10000) {
+        valid(imageInput);
+        console.log("Valid Image");
+        document.querySelector("#fileInvalid").style.display = "none";
+    } else {
+        invalid(imageInput);
+        console.error("Invalid Image");
+        document.querySelector("#fileInvalid").style.display = "block";
+    }
+});
 
-},{"../scripts/data":"aryXu","../scripts/tools":"httsp"}],"httsp":[function(require,module,exports) {
+},{"../scripts/tools":"httsp","../scripts/data":"aryXu"}],"httsp":[function(require,module,exports) {
 // User Object and Element functions
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
