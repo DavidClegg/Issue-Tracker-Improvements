@@ -19,10 +19,11 @@ Show and Manage the Team
 
 ## All Issues Page
 Show and Manage Issues
-- 
+- add issues, select individual issues
 
 ## Individual Issue Page
 Shows the full details of an issue
+- edit and update the summary, description, priority, status, and dates of an issue
 
 ## Contact Form Page
 Simple email contact form
