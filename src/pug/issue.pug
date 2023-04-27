@@ -77,3 +77,68 @@ block page-content
     //- I'm really proud of this page. It's simple and effective.
     //- But I think it would be best to turn this basically into a form.
     //- That means trashing the whole things and going with something else.
+
+    section#Issue 
+        article 
+            .container
+                .row.gx-5
+                    .col-md-4
+                        .row.border-bottom
+                            .col-md-4
+                                strong ID
+                            .col-md-8
+                                p#ID is00X
+                        .row
+                            .btn-group.shadow-0.col-md-12.border-bottom
+                                button.btn.btn-link.dropdown-toggle.col-md-12.p-0.pt-3(type="button" data-mdb-toggle="dropdown")
+                                    .row.align-items-center
+                                        .col-md-3
+                                            img#Image.rounded-circle(src="https://mdbootstrap.com/img/new/avatars/8.jpg",alt="",style="width: 45px; height: 45px")
+                                        .col-md-9
+                                            p#Name.mb-1 John Doe
+                                ul#MemberDropDown.dropdown-menu.col-md-12
+                                    
+                        .row.pt-3.border-bottom
+                            .col-md-4
+                                strong Start Date
+                            .col-md-8
+                                p 
+                                    span#Start 22-04-2023
+                                    img#StartButton.-icon(src="../icons/calendar.svg")
+                        .row.pt-3
+                            .col-md-4
+                                strong Due Date
+                            .col-md-8
+                                p
+                                    span#Due 22-04-2023
+                                    img#DueButton.-icon(src="../icons/calendar.svg")
+                    .col-md-8
+                        .row.gx-3
+                            .col-md-6
+                                .btn-group.shadow-0.col-md-12.border-bottom
+                                    button.btn.btn-link.dropdown-toggle(type="button" data-mdb-toggle="dropdown") 
+                                        span#Status.status-element Status
+                                    ul.dropdown-menu 
+                                        li#StatusNew.dropdown-item New
+                                        li#StatusProgress.dropdown-item In Progress
+                                        li#StatusResolved.dropdown-item Resolved
+                                        li#StatusClosed.dropdown-item Closed
+                            .col-md-6 
+                                .btn-group.shadow-0.col-md-12.border-bottom
+                                    button.btn.btn-link.rounded.dropdown-toggle(type="button" data-mdb-toggle="dropdown") 
+                                        span#Priority Priority
+                                    ul.dropdown-menu 
+                                        li#PriorityLow.dropdown-item.text-bg-info Low
+                                        li#PriorityMedium.dropdown-item.text-bg-warning  Medium
+                                        li#PriorityHigh.dropdown-item.text-bg-danger  High
+                                        li#PriorityCritical.dropdown-item.text-bg-dark  Critical
+
+                        .row.gx-2.flex-row.border-bottom.flex-row
+                                p.flex-grow-1.-icon.p-3
+                                    img#SummaryButton.-icon(src="../icons/pencil.svg" height="18")
+                                    span#Summary Lorem ipsum dolor
+                        .row.gx-2.flex-row.flex-row
+                            p.flex-grow-1.-icon.p-3 
+                                img#DescriptionButton.-icon(src="../icons/pencil.svg" height="18")
+                                span#Description Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius, minus provident. Laboriosam beatae magnam fugit quis voluptatem. Eum mollitia consectetur nostrum. Vero expedita quos commodi voluptates nemo inventore ipsum tempore!
+                                
