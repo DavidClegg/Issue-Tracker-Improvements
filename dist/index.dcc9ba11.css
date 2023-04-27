@@ -145,4 +145,22 @@ select > option:first-child {
   font-size: 2rem;
 }
 
+.-icon {
+  height: 18px;
+  width: auto;
+}
+
+img.-icon {
+  cursor: pointer;
+  float: right;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+#Issue input[type="date"] {
+  opacity: 1;
+}
+
 /*# sourceMappingURL=index.dcc9ba11.css.map */

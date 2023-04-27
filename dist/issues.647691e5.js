@@ -557,27 +557,140 @@ function hmrAccept(bundle, id) {
 }
 
 },{}],"epjrU":[function(require,module,exports) {
-var _toolsJs = require("../scripts/tools.js");
-var _dataJs = require("../scripts/data.js");
+// import { addIssueElement, CreateIssueElement } from "../scripts/tools.js"
+// import {users, issues as issueArray, issueLogs} from "../scripts/data.js"
+// const priorityStyle = {"Low":"table-info","Medium":"table-warning","High":"table-danger","Critical":"table-dark"}
+// const tableBody = document.querySelector("#issueTable");
+// const clearIssuesButton = document.querySelector("#clearIssuesButton");
+// issueArray.forEach(issue => {
+//     let issueElement = CreateIssueElement(issue, priorityStyle, users);
+//     addIssueElement(issueElement, tableBody);
+// })
+// clearIssuesButton.addEventListener("click", e=>{
+//     let choice = confirm("Are you sure you want to do this?")
+//     console.log(choice)
+//     choice?
+//         console.log("NOOOO! WHAT HAVE YOU DONE!")
+//         : console.log("Oh, Thank god!")
+// })
+var _tools = require("../scripts/tools");
+var _data = require("../scripts/data");
+const userSection = document.querySelector("#users");
+const issueTable = document.querySelector("#issueTable");
+const issueModal = document.querySelector("#iissueModal");
+const showModalButton = document.querySelector("#showModal");
+const form = {
+    body: document.querySelector("#issueForm"),
+    title: document.querySelector("#modal-title"),
+    issueSummary: document.querySelector("#issue-summary"),
+    issueDescription: document.querySelector("#issue-description"),
+    memberSelect: document.querySelector("#member-select"),
+    prioritySelect: document.querySelector("#priority-select"),
+    statusSelect: document.querySelector("#status-select"),
+    dateAssign: document.querySelector("#date-assign"),
+    dateDue: document.querySelector("#date-due"),
+    addIssue: document.querySelector("#addIssue")
+};
 const priorityStyle = {
     "Low": "table-info",
     "Medium": "table-warning",
     "High": "table-danger",
     "Critical": "table-dark"
 };
-const tableBody = document.querySelector("#issueTable");
-const clearIssuesButton = document.querySelector("#clearIssuesButton");
-(0, _dataJs.issues).forEach((issue)=>{
-    let issueElement = (0, _toolsJs.CreateIssueElement)(issue, priorityStyle, (0, _dataJs.users));
-    (0, _toolsJs.addIssueElement)(issueElement, tableBody);
+// users.forEach(user => {let element = new CreateUserElement(user);addUserElement(element, userSection);})
+(0, _data.users).forEach((user)=>populateUserOption(user));
+if ((0, _data.issues).length > 0) (0, _data.issues).forEach((issue)=>{
+    if (issue.status != "Closed") {
+        let newIssue = new (0, _tools.CreateIssueElement)(issue, priorityStyle, (0, _data.users));
+        (0, _tools.addIssueElement)(newIssue);
+        /**Trying to sort issues */ (0, _tools.addIssueElement)(newIssue, document.querySelector(`#issueTable`));
+    }
 });
-clearIssuesButton.addEventListener("click", (e)=>{
-    let choice = confirm("Are you sure you want to do this?");
-    console.log(choice);
-    choice ? console.log("NOOOO! WHAT HAVE YOU DONE!") : console.log("Oh, Thank god!");
+function populateUserOption(user, target = form.memberSelect) {
+    // add users to the issue options
+    let option = document.createElement("option");
+    option.value = user.id;
+    option.innerText = `${user.firstName} ${user.lastName}`;
+    target.appendChild(option);
+}
+form.body.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    if (e.submitter == document.querySelector("button#cancel")) return;
+    console.log("ADD ISSUE");
+    // get data from elements
+    let summary = form.issueSummary.value;
+    let description = form.issueDescription.value;
+    let member = form.memberSelect.value;
+    let priority = form.prioritySelect.value;
+    let status = form.statusSelect.value;
+    let dateAssign = form.dateAssign.valueAsNumber;
+    let dateDue = form.dateDue.valueAsNumber;
+    // create new issue
+    let issue = new (0, _tools.IssueObject)(summary, description, member, priority, status, dateAssign, dateDue, (0, _data.issues));
+    (0, _data.issues).push(issue);
+    saveIssues();
+    let newIssue = new (0, _tools.CreateIssueElement)(issue, priorityStyle, (0, _data.users));
+    (0, _tools.addIssueElement)(newIssue);
+    (0, _tools.updateMemberIssueCount)((0, _data.users), (0, _data.issues));
+    // update page
+    saveUsers();
+    form.body.reset();
+    form.addIssue.setAttribute("disabled", "");
 });
+// Validation Logic
+const valid = (element)=>element.setCustomValidity("");
+const invalid = (element)=>element.setCustomValidity("Invalid");
+function validateForm() {
+    let isValid = form.issueSummary.value.length >= 1 && form.issueDescription.value.length >= 1 && form.memberSelect.value != "value" && form.prioritySelect.value != "value" && form.statusSelect.value != "value" && form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber;
+    return isValid;
+}
+showModalButton.addEventListener("click", (e)=>{
+    console.log("Show Modal Button was Clicked");
+    form.title.innerText = `Add Issue`;
+    form.body.reset();
+    form.addIssue.setAttribute("disabled", "");
+});
+form.body.addEventListener("change", (e)=>{
+    let isValid = validateForm();
+    if (isValid) form.addIssue.removeAttribute("disabled");
+    else form.addIssue.setAttribute("disabled", "");
+});
+form.issueSummary.addEventListener("input", (e)=>{
+    console.log("Summary CHANGE");
+    form.issueSummary.value.length >= 1 ? valid(form.issueSummary) : invalid(form.issueSummary);
+});
+form.issueDescription.addEventListener("input", (e)=>{
+    console.log("Description CHANGE");
+    form.issueDescription.value.length >= 1 ? valid(form.issueDescription) : invalid(form.issueDescription);
+});
+form.memberSelect.addEventListener("input", (e)=>{
+    console.log("Member CHANGE");
+    form.memberSelect.value != "value" ? valid(form.memberSelect) : invalid(form.memberSelect);
+});
+form.prioritySelect.addEventListener("change", (e)=>{
+    console.log("Priority CHANGE");
+    form.prioritySelect.value != "value" ? valid(form.prioritySelect) : invalid(form.prioritySelect);
+});
+form.statusSelect.addEventListener("change", (e)=>{
+    console.log("Status CHANGE");
+    form.statusSelect.value != "value" ? valid(form.statusSelect) : invalid(form.statusSelect);
+});
+form.dateAssign.addEventListener("change", (e)=>{
+    console.log("Date Assign CHANGE");
+    form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber ? valid(form.dateDue) : invalid(form.dateDue);
+});
+form.dateDue.addEventListener("change", (e)=>{
+    console.log("Date Due CHANGE");
+    form.dateDue.valueAsNumber >= form.dateAssign.valueAsNumber ? valid(form.dateDue) : invalid(form.dateDue);
+});
+function saveIssues() {
+    localStorage.setItem("issues", (0, _data.issues).map((issue)=>JSON.stringify(issue)).toString());
+}
+function saveUsers() {
+    localStorage.setItem("team", (0, _data.users).map((user)=>JSON.stringify(user)).toString());
+}
 
-},{"../scripts/data.js":"aryXu","../scripts/tools.js":"httsp"}],"httsp":[function(require,module,exports) {
+},{"../scripts/tools":"httsp","../scripts/data":"aryXu"}],"httsp":[function(require,module,exports) {
 // User Object and Element functions
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);

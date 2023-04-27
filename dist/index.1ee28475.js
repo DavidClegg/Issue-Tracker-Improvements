@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"baqWm":[function(require,module,exports) {
+})({"cW2s6":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "64fd9ef170002f7f";
+module.bundle.HMR_BUNDLE_ID = "fc4045d31ee28475";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -713,6 +713,163 @@ exports.export = function(dest, destName, get) {
 },{}],"lCRj0":[function(require,module,exports) {
 module.exports = JSON.parse("{}");
 
-},{}]},["baqWm"], null, "parcelRequirec1be")
+},{}],"httsp":[function(require,module,exports) {
+// User Object and Element functions
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "UserObject", ()=>UserObject);
+parcelHelpers.export(exports, "CreateUserElement", ()=>CreateUserElement);
+parcelHelpers.export(exports, "addUserElement", ()=>addUserElement);
+parcelHelpers.export(exports, "updateUserElement", ()=>updateUserElement);
+// Issue Object and Element functions
+parcelHelpers.export(exports, "IssueObject", ()=>IssueObject);
+parcelHelpers.export(exports, "CreateIssueElement", ()=>CreateIssueElement);
+parcelHelpers.export(exports, "addIssueElement", ()=>addIssueElement);
+parcelHelpers.export(exports, "updateIssueElement", ()=>updateIssueElement);
+// Extra tools
+parcelHelpers.export(exports, "updateMemberIssueCount", ()=>updateMemberIssueCount);
+parcelHelpers.export(exports, "random", ()=>random);
+function UserObject(firstName, lastName, imgSrc, usersArray = users) {
+    // This function creates a user object
+    /// This is to expand the number of users on a team
+    let randomNumber;
+    // I'm using a random number, but I should probably just use the length of the users array and just keep incrementing 
+    let collision = true;
+    while(collision){
+        randomNumber = Math.floor(Math.random() * 1000);
+        collision = false;
+        for (let user of usersArray)if (user.id == "tm" + randomNumber) collision = true;
+    }
+    return {
+        id: "tm" + randomNumber,
+        firstName: firstName,
+        lastName: lastName,
+        imgSrc: imgSrc,
+        issuesAssigned: 0
+    };
+}
+function CreateUserElement(user) {
+    let container = document.createElement("div");
+    container.classList.add("team-member");
+    container.id = user.id;
+    let image = document.createElement("img");
+    image.classList.add("avatar");
+    image.classList.add("rounded-circle");
+    image.classList.add("mb-3");
+    image.classList.add("shadow-4-strong");
+    image.alt = "avatar";
+    image.src = user.imgSrc;
+    let name = document.createElement("h5");
+    name.classList.add("mb-2");
+    name.innerText = `${user.firstName} ${user.lastName}`;
+    let issueDetail = document.createElement("p");
+    issueDetail.classList.add("text-muted");
+    issueDetail.classList.add("issue-detail");
+    let issuedNum = document.createElement("span");
+    issuedNum.classList.add("badge");
+    issuedNum.classList.add("issue-number");
+    issuedNum.innerText = user.issuesAssigned;
+    let assigned = document.createElement("span");
+    assigned.innerText = "Assigned";
+    issueDetail.appendChild(issuedNum);
+    issueDetail.appendChild(assigned);
+    container.appendChild(image);
+    container.appendChild(name);
+    container.appendChild(issueDetail);
+    return container;
+}
+function addUserElement(userElement, target = userSection) {
+    target.appendChild(userElement);
+}
+function updateUserElement(user) {
+    // Find user element on page
+    let oldUser = document.querySelector(`#${user.id}`);
+    let newUser = new CreateUserElement(user);
+    oldUser.replaceWith(newUser);
+}
+function IssueObject(summary, description, assigneeID, priority, status, dateStart, dateDue, issueArray) {
+    let issue = {
+        id: `is${issueArray.length}`,
+        summary,
+        description,
+        assigneeID,
+        priority,
+        status,
+        dateStart,
+        dateDue
+    };
+    return issue;
+}
+function CreateIssueElement(issue, priorityStyle, users1) {
+    let row = document.createElement("tr");
+    row.dataset.id = issue.id;
+    // // // For Modal
+    // row.dataset.mdbToggle = "modal"
+    // row.dataset.mdbTarget = "#issueModal"
+    // row.setAttribute('href',`/issue.html?${issue.id}`)
+    row.setAttribute("onclick", `window.location.href = "./issue.html?${issue.id}"`);
+    // //
+    let idCell = document.createElement("td");
+    idCell.id = issue.id + "-idcell";
+    idCell.innerText = issue.id;
+    let summaryCell = document.createElement("td");
+    summaryCell.id = issue.id + "-summarycell";
+    summaryCell.innerText = issue.summary;
+    let priorityCell = document.createElement("td");
+    priorityCell.id = issue.id + "-prioritycell";
+    priorityCell.innerText = issue.priority;
+    priorityCell.classList.add(priorityStyle[issue.priority]);
+    let statusCell = document.createElement("td");
+    statusCell.id = issue.id + "-statuscell";
+    statusCell.innerText = issue.status;
+    let dueCell = document.createElement("td");
+    dueCell.id = issue.id + "-duecell";
+    dueCell.innerText = new Date(issue.dateDue).toLocaleString("en-GB", {
+        "dateStyle": "short"
+    });
+    let assignCell = document.createElement("td");
+    assignCell.id = issue.id + "-assigncell";
+    let user = users1.find((user)=>user.id == issue.assigneeID);
+    assignCell.innerText = `${user.firstName} ${user.lastName}`;
+    row.appendChild(idCell);
+    row.appendChild(summaryCell);
+    row.appendChild(priorityCell);
+    row.appendChild(statusCell);
+    row.appendChild(dueCell);
+    row.appendChild(assignCell);
+    return row;
+}
+function addIssueElement(issueElement, target = issueTable) {
+    target.appendChild(issueElement);
+    // issueElement.addEventListener("click", updateIssueEvent)
+    issueElement.addEventListener("click", (e)=>console.log("Click"));
+}
+function updateIssueElement(issue) {
+    // This might also have to update the user.assignedIssues variables for both users
+    let oldIssue = document.querySelector(`#${issue.id}`);
+    let newIssue = new CreateIssueElement(issue);
+    oldIssue.replaceWith(newIssue);
+}
+function updateMemberIssueCount(users1, issueArray) {
+    let member;
+    let targetMember;
+    users1.forEach((user)=>user.issuesAssigned = 0);
+    issueArray.forEach((issue)=>{
+        if (issue.status != "Closed") {
+            member = issue.assigneeID;
+            targetMember = users1.find((user)=>user.id == member);
+            targetMember.issuesAssigned++;
+        }
+        updateUserElement(targetMember);
+    });
+    localStorage.setItem("team", users1.map((user)=>JSON.stringify(user)).toString());
+}
+function random(min = 0, max) {
+    // This is to create junk data
+    return Math.floor(min + Math.random() * (max - min));
+}
+function save() {}
 
-//# sourceMappingURL=index.70002f7f.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["cW2s6"], null, "parcelRequirec1be")
+
+//# sourceMappingURL=index.1ee28475.js.map
