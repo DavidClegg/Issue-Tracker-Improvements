@@ -688,12 +688,13 @@ UpdateIssue: {
             el.duedate.innerText = new Date(newInput.value).toLocaleString("en-GB", {
                 "dateStyle": "short"
             });
+            save("dateDue", newInput.valueAsNumber);
         });
     });
     edit.start.addEventListener("click", (e)=>{
         let newInput = document.createElement("input");
         newInput.setAttribute("type", "date");
-        newInput.setAttribute("max", new Date(issue.dateStart).toISOString().slice(0, 10));
+        newInput.setAttribute("max", new Date(issue.dateDue).toISOString().slice(0, 10));
         let startDateParent = el.startdate.parentElement;
         startDateParent.replaceWith(newInput);
         newInput.valueAsNumber = issue.dateStart;
@@ -705,6 +706,7 @@ UpdateIssue: {
             el.startdate.innerText = new Date(newInput.value).toLocaleString("en-GB", {
                 "dateStyle": "short"
             });
+            save("dateStart", newInput.valueAsNumber);
         });
     });
     // Summary
@@ -741,6 +743,7 @@ UpdateIssue: {
             console.log(newInput.value);
             inputWrapper.replaceWith(summaryParent);
             el.summary.innerText = newInput.value;
+            save("summary", newInput.value);
         });
     });
     // Description
@@ -776,24 +779,29 @@ UpdateIssue: {
             console.log(newInput.value);
             inputWrapper.replaceWith(descriptionParent);
             el.description.innerText = newInput.value;
+            save("description", newInput.value);
         });
     });
     // Status dropdown
     edit.status.new.addEventListener("click", (e)=>{
         el.status.innerText = "New";
-    // SAVE
+        // SAVE
+        save("status", "New");
     });
     edit.status.progress.addEventListener("click", (e)=>{
         el.status.innerText = "In Progress";
-    // SAVE
+        // SAVE
+        save("status", "In Progress");
     });
     edit.status.resolved.addEventListener("click", (e)=>{
         el.status.innerText = "Resolved";
-    // SAVE
+        // SAVE
+        save("status", "Resolved");
     });
     edit.status.closed.addEventListener("click", (e)=>{
         el.status.innerText = "Closed";
-    // SAVE
+        // SAVE
+        save("status", "Closed");
     });
     // Priority dropdown
     edit.priority.low.addEventListener("click", (e)=>{
@@ -816,13 +824,11 @@ UpdateIssue: {
         parent.classList.remove(priorityStyle.Critical);
         el.priority.innerText = priority;
         parent.classList.add(priorityStyle[priority]);
-    // SAVE
+        // SAVE
+        save("priority", priority);
     }
     // Members dropdown
-    /**                         li.dropdown-item.border-bottom
-                                    .col-md-12.pb-2
-                                        img.rounded-circle.me-2(src="https://mdbootstrap.com/img/new/avatars/8.jpg",style="width: 45px; height: 45px")
-                                        span John Doe */ (0, _dataJs.users).forEach((user)=>{
+    (0, _dataJs.users).forEach((user)=>{
         let userOption = document.createElement("li");
         userOption.classList.add("dropdown-item");
         userOption.classList.add("border-bottom");
@@ -846,12 +852,29 @@ UpdateIssue: {
         e.preventDefault();
         el.assignee.image.src = user.imgSrc;
         el.assignee.name.innerText = `${user.firstName} ${user.lastName}`;
-    // SAVE
+        // SAVE
+        save("assigneeID", user.id);
     }
     function save(field, value) {
         // log[issue.id].push([Date.now(), field, value]);
         issue[field] = value;
-    }
+        console.log([
+            Date.now(),
+            field,
+            value
+        ]);
+        console.log(issue);
+        localStorage.setItem("issues", (0, _dataJs.issues).map((issue)=>JSON.stringify(issue)).toString());
+    /**{
+    "id": "is33",
+    "summary": "Issue Update Form Validation",
+    "description": "Add form validation to the issue update page. This is an important feature and the next major step to making this a functional app.",
+    "assigneeID": "tm584",
+    "priority": "High",
+    "status": "In Progress",
+    "dateStart": 1682553600000,
+    "dateDue": 1682640000000
+} */ }
 // Handle input validation
 // Handle Saving
 }
