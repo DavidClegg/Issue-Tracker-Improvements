@@ -9,76 +9,8 @@ block page-name
             h3 Issue Details
 
 block page-content
-    section 
-        h1#pageTitle No Issue Selected 
-        article 
-            .row.justify-content-end.mb-3.gap-3
-                button#EditIssue.btn.btn-primary.col-md-3(type="button") Edit Issue
-                button#RemoveIssue.btn.btn-danger.col-md-3(type="button") 
-                    strong Remove Issue
-            .container
-                .row.gx-5
-                    .col-md-4
-                        .row
-                            .col-md-6
-                                strong ID
-                            .col-md-6
-                                p#issueIDElement is00X
-                            hr
-                        .row
-                            .col-md-6.d-flex.align-items-center
-                                img#assigneeImage.rounded-circle(src="https://mdbootstrap.com/img/new/avatars/8.jpg",alt="",style="width: 45px; height: 45px")
-                                .ms-3
-                            .col-md-6.d-flex.align-items-center
-                                p#assigneeName.mb-1 John Doe
-                            hr.mt-2
-                        .row
-                            .col-md-6
-                                strong Start Date
-                            .col-md-6
-                                p#startDateElement 22-04-2023
-                            hr
-                        .row
-                            .col-md-6
-                                strong Due Date
-                            .col-md-6
-                                p#dueDateElement 22-04-2023
-                    .col-md-8
-                        .row.gx-3
-                            .col-md-6
-                                p.text-center#issueStatusElement In Progress 
-                                hr
-                            .col-md-6 
-                                p#issuePriorityElement.text-center.mb-0.pb-2.pt-2 Medium
-                                hr.mt-0 
-                        .row.gx-2
-                            p#issueSummaryElement Lorem ipsum dolor
-                            hr
-                        .row.gx-2
-                            .col-md-8
-                                p#issueDescriptionElement Lorem ipsum dolor sit, amet consectetur adipisicing elit. In suscipit dicta voluptatum incidunt? A maiores ab libero. Vero iste omnis consequatur porro pariatur. Perspiciatis, alias culpa! Harum at commodi voluptas.
-            .accordion
-                .accordion-item 
-                    h2.accordion-header
-                        button.accordion-button.collapsed(data-mdb-toggle="collapse",data-mdb-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne") Show Change Log 
-                    #collapseOne.accordion-collapse.collapse(data-mdb-parent="#accordionExample")
-                        .accordion-body
-                            table 
-                                thead
-                                    th time
-                                    th field
-                                    th change
-                                tbody#issueLogTable
-                                    tr 
-                                        td 1681430400000
-                                        td Descrption 
-                                        td This is my changed description example
-    script(src="../scripts/issuePage.js", type="module") 
-    //- I'm really proud of this page. It's simple and effective.
-    //- But I think it would be best to turn this basically into a form.
-    //- That means trashing the whole things and going with something else.
-
     section#Issue 
+        h1#pageTitle No Issue Selected 
         article 
             .container
                 .row.gx-5
@@ -112,6 +44,7 @@ block page-content
                                 p
                                     span#Due 22-04-2023
                                     img#DueButton.-icon(src="../icons/calendar.svg")
+                                
                     .col-md-8
                         .row.gx-3
                             .col-md-6
@@ -136,9 +69,29 @@ block page-content
                         .row.gx-2.flex-row.border-bottom.flex-row
                                 p.flex-grow-1.-icon.p-3
                                     img#SummaryButton.-icon(src="../icons/pencil.svg" height="18")
-                                    span#Summary Lorem ipsum dolor
+                                    span#Summary Summary Text
+                                div#SummaryInvalid.invalid-msg Add a Summary!
                         .row.gx-2.flex-row.flex-row
                             p.flex-grow-1.-icon.p-3 
                                 img#DescriptionButton.-icon(src="../icons/pencil.svg" height="18")
-                                span#Description Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius, minus provident. Laboriosam beatae magnam fugit quis voluptatem. Eum mollitia consectetur nostrum. Vero expedita quos commodi voluptates nemo inventore ipsum tempore!
+                                span#Description Description Text
+                            div#DescriptionInvalid.invalid-msg Add a Description!
+
+            .accordion
+                .accordion-item 
+                    h2.accordion-header
+                        button.accordion-button.collapsed(data-mdb-toggle="collapse",data-mdb-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne") Show Change Log 
+                    #collapseOne.accordion-collapse.collapse(data-mdb-parent="#accordionExample")
+                        .accordion-body
+                            table 
+                                thead
+                                    th time
+                                    th field
+                                    th change
+                                tbody#issueLogTable
+                                    tr 
+                                        td 1681430400000
+                                        td Descrption 
+                                        td This is my changed description example
                                 
+    script(src="../scripts/issuePage.js", type="module") 

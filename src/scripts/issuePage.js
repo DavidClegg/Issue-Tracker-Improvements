@@ -1,47 +1,47 @@
 import {users, issues} from "../scripts/data.js"
-OldVersion:{
-    const urlMatch = /\?is[0-9]+/
-    const validTarget = urlMatch.test(window.location.search);
-    const targetID = validTarget?urlMatch.exec(window.location.search)[0].replace("?",""):"NO VALID ISSUE";
-    console.log(targetID);
-    const targetIssue = issues.find(issue => issue.id == targetID);
-    console.log(targetIssue);
-    const issueMember = users.find(user=> user.id == targetIssue.assigneeID)
-    console.log(issueMember);
+// OldVersion:{
+//     const urlMatch = /\?is[0-9]+/
+//     const validTarget = urlMatch.test(window.location.search);
+//     const targetID = validTarget?urlMatch.exec(window.location.search)[0].replace("?",""):"NO VALID ISSUE";
+//     console.log(targetID);
+//     const targetIssue = issues.find(issue => issue.id == targetID);
+//     console.log(targetIssue);
+//     const issueMember = users.find(user=> user.id == targetIssue.assigneeID)
+//     console.log(issueMember);
     
     
-    const priorityStyle = {"Low":"bg-info","Medium":"bg-warning","High":"bg-danger","Critical":"bg-dark"}
-    const priorityTextStyle = {"Low":"text-dark","Medium":"text-dark","High":"text-white","Critical":"text-white"}
+//     const priorityStyle = {"Low":"bg-info","Medium":"bg-warning","High":"bg-danger","Critical":"bg-dark"}
+//     const priorityTextStyle = {"Low":"text-dark","Medium":"text-dark","High":"text-white","Critical":"text-white"}
     
-    const pageElements = {
-        title : document.querySelector("#pageTitle"),
-        id : document.querySelector("#issueIDElement"),
-        assignee : {
-            image: document.querySelector("#assigneeImage"),
-            name: document.querySelector("#assigneeName"),
-        },
-        startdate : document.querySelector("#startDateElement"),
-        duedate : document.querySelector("#dueDateElement"),
-        status : document.querySelector("#issueStatusElement"),
-        priority : document.querySelector("#issuePriorityElement"),
-        summary : document.querySelector("#issueSummaryElement"),
-        description : document.querySelector("#issueDescriptionElement"),
-        logTable : document.querySelector("#issueLogTable"),
-    }
+//     const pageElements = {
+//         title : document.querySelector("#pageTitle"),
+//         id : document.querySelector("#issueIDElement"),
+//         assignee : {
+//             image: document.querySelector("#assigneeImage"),
+//             name: document.querySelector("#assigneeName"),
+//         },
+//         startdate : document.querySelector("#startDateElement"),
+//         duedate : document.querySelector("#dueDateElement"),
+//         status : document.querySelector("#issueStatusElement"),
+//         priority : document.querySelector("#issuePriorityElement"),
+//         summary : document.querySelector("#issueSummaryElement"),
+//         description : document.querySelector("#issueDescriptionElement"),
+//         logTable : document.querySelector("#issueLogTable"),
+//     }
     
-    pageElements.title.innerText = `Issue: ${targetIssue.id}`
-    pageElements.id.innerText = `${targetIssue.id}`
-    pageElements.assignee.image.src = issueMember.imgSrc;
-    pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
-    pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {"dateStyle":"short"});
-    pageElements.duedate.innerText = new Date(targetIssue.dateDue).toLocaleString("en-GB", {"dateStyle":"short"});
-    pageElements.status.innerText = targetIssue.status;
-    pageElements.priority.innerText = targetIssue.priority;
-    pageElements.priority.classList.add(priorityStyle[targetIssue.priority]);
-    pageElements.priority.classList.add(priorityTextStyle[targetIssue.priority]); // changing this is going to be a bit of a pain
-    pageElements.summary.innerText = targetIssue.summary;
-    pageElements.description.innerText = targetIssue.description;
-}
+//     pageElements.title.innerText = `Issue: ${targetIssue.id}`
+//     pageElements.id.innerText = `${targetIssue.id}`
+//     pageElements.assignee.image.src = issueMember.imgSrc;
+//     pageElements.assignee.name.innerText = `${issueMember.firstName} ${issueMember.lastName}`;
+//     pageElements.startdate.innerText = new Date(targetIssue.dateStart).toLocaleString("en-GB", {"dateStyle":"short"});
+//     pageElements.duedate.innerText = new Date(targetIssue.dateDue).toLocaleString("en-GB", {"dateStyle":"short"});
+//     pageElements.status.innerText = targetIssue.status;
+//     pageElements.priority.innerText = targetIssue.priority;
+//     pageElements.priority.classList.add(priorityStyle[targetIssue.priority]);
+//     pageElements.priority.classList.add(priorityTextStyle[targetIssue.priority]); // changing this is going to be a bit of a pain
+//     pageElements.summary.innerText = targetIssue.summary;
+//     pageElements.description.innerText = targetIssue.description;
+// }
 
 UpdateIssue:{
     const urlMatch = /\?is[0-9]+/
@@ -77,8 +77,8 @@ UpdateIssue:{
         logTable : document.querySelector("#issueLogTable"),
     }
 
-    // el.title.innerText = `Issue: ${targetIssue.id}`
-    el.id.innerText = `${issue.id}`
+    el.title.innerText = `Issue: ${issue.id}`;
+    el.id.innerText = `${issue.id}`;
     el.assignee.image.src = member.imgSrc;
     el.assignee.name.innerText = `${member.firstName} ${member.lastName}`;
     el.startdate.innerText = new Date(issue.dateStart).toLocaleString("en-GB", {"dateStyle":"short"});
@@ -89,18 +89,6 @@ UpdateIssue:{
     el.summary.innerText = issue.summary;
     el.description.innerText = issue.description;
 
-    /*
-    // Populate users list
-
-    // Handle Clicking on Editable elements
-    Two kinds of element:
-        Drop downs
-        Replacements
-    
-    Drop downs should be handled by clicking on the li element and setting the value of the top to that
-
-    Replace should be handled by clicking on the replace button and replacing the text element with a text/date input, set the value of the input to the value of the text, and focusing the new input
-    */
     const edit = {
         // Inputs
         due: document.querySelector("#Issue #DueButton"),
@@ -123,16 +111,26 @@ UpdateIssue:{
         members:{},// members might be handled another way, by adding the event to the element that's created when populating the list
     }
 
+    const invalid = {
+        due:document.querySelector("#Issue #DueInvalid"),
+        start:document.querySelector("#Issue #StartInvalid"),
+        summary:document.querySelector("#Issue #SummaryInvalid"),
+        description:document.querySelector("#Issue #DescriptionInvalid")
+    }
+
     // Dates
     edit.due.addEventListener("click", e => {
         let newInput = document.createElement("input")
         newInput.setAttribute("type","date")
+        // Convert the due date from a unix timestamp number to a valid min date format yyyy-mm-dd 
+        // This was a pain, but it removes the need to add validation because my validation was only checking that the due date was on or after the start date anyway
+        newInput.setAttribute("min", new Date(issue.dateStart).toISOString().slice(0, 10))
         let dueDateParent = el.duedate.parentElement;
         dueDateParent.replaceWith(newInput)
         newInput.valueAsNumber = issue.dateDue; // This doesn't keep the updated value until saving is implemented
         newInput.focus()
-        newInput.addEventListener("change", e =>{ 
-            // VALIDATE AND SAVE
+        newInput.addEventListener("input", e =>{
+            // SAVE
             console.log(newInput.value); 
             newInput.replaceWith(dueDateParent);
             el.duedate.innerText =  new Date(newInput.value).toLocaleString("en-GB", {"dateStyle":"short"});
@@ -142,12 +140,13 @@ UpdateIssue:{
     edit.start.addEventListener("click", e => {
         let newInput = document.createElement("input")
         newInput.setAttribute("type","date")
+        newInput.setAttribute("max", new Date(issue.dateStart).toISOString().slice(0, 10))
         let startDateParent = el.startdate.parentElement;
         startDateParent.replaceWith(newInput)
         newInput.valueAsNumber = issue.dateStart;
         newInput.focus()
-        newInput.addEventListener("change", e =>{ 
-            // VALIDATE AND SAVE
+        newInput.addEventListener("input", e =>{
+            // SAVE
             console.log(newInput.value); 
             newInput.replaceWith(startDateParent);
             el.startdate.innerText =  new Date(newInput.value).toLocaleString("en-GB", {"dateStyle":"short"});
@@ -175,8 +174,18 @@ UpdateIssue:{
         let summaryParent = el.summary.parentElement;
         summaryParent.replaceWith(inputWrapper)
         newInput.focus()
+        newInput.addEventListener("input", e=>{
+            // Validate
+            if(newInput.value.length >= 1){
+                newButton.removeAttribute("disabled")
+                invalid.summary.style.display = "none"
+            } else{
+                newButton.setAttribute("disabled", "")
+                invalid.summary.style.display = "block"
+            }
+        })
         newButton.addEventListener("click", e =>{ 
-            // VALIDATE AND SAVE
+            // SAVE
             console.log(newInput.value); 
             inputWrapper.replaceWith(summaryParent);
             el.summary.innerText =  newInput.value;
@@ -203,7 +212,16 @@ UpdateIssue:{
         let descriptionParent = el.description.parentElement;
         descriptionParent.replaceWith(inputWrapper)
         newInput.focus()
-
+        newInput.addEventListener("input", e=>{
+            // Validate
+            if(newInput.value.length >= 1){
+                newButton.removeAttribute("disabled")
+                invalid.description.style.display = "none"
+            } else{
+                newButton.setAttribute("disabled", "")
+                invalid.description.style.display = "block"
+            }
+        })
         newButton.addEventListener("click", e =>{ 
             // VALIDATE AND SAVE
             console.log(newInput.value); 
@@ -294,9 +312,14 @@ UpdateIssue:{
     }
 
 
-
+    function save(field, value){
+        // log[issue.id].push([Date.now(), field, value]);
+        issue[field] = value;
+    }
 
     // Handle input validation
+    
+
 
     // Handle Saving
 }
