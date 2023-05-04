@@ -1,5 +1,6 @@
 # Issue Tracker Improvements
- Some functional improvements to the issue tracker example project
+ Some functional improvements to the issue tracker example project.
+ Built with Parcel, Pug, Sass, and Material Bootstrap
 
 [Link to Live version](https://davidclegg.github.io/Issue-Tracker-Improvements/)
 
